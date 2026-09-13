@@ -79,7 +79,7 @@ your-project/
 ├── .cursor/rules/harness.mdc  # Cursor 项目规则
 ├── .github/                   # Copilot 指令 + PR 模板
 ├── .kiro/steering/harness.md  # Kiro steering
-├── skills/                    # 本地角色技能库，默认内置 16 个技能
+├── skills/                    # 仓库内置角色技能库，默认内置 14 个技能
 ├── evals/                     # AI 产出质量回归检查
 ├── scripts/                   # 维护脚本，日常使用无需先执行
 └── docs/harness/              # 05 沉淀 + ai-harness-kit 主线迭代记录
@@ -98,7 +98,7 @@ your-project/
 | AI 行为规范 | `AGENTS.md` |
 | 项目状态持久化 | `project-tracker.md` |
 | 安全红线 | `SECURITY.md` |
-| 本地角色技能 | `skills/` + `.ai/SKILLS.md` |
+| 内置角色技能 | `skills/` + `.ai/SKILLS.md` |
 | Claude Code 适配 | `.claude/settings.json` |
 | Cursor 适配 | `.cursor/rules/harness.mdc` |
 | GitHub Copilot 适配 | `.github/copilot-instructions.md` |
@@ -132,7 +132,13 @@ python3 evals/runner.py . --since HEAD~1
 
 ## 七、版本
 
-当前版本：`harness-v1.9`
+当前版本：`harness-v1.10`
+
+v1.10 变更：
+
+1. 技能主源收敛到 `ai-harness-kit/skills/`，不再依赖外部 `00-Skills汇总`。
+2. `.ai/SKILLS.md` 按当前 14 个内置技能重建索引。
+3. `scripts/refresh-skills.sh` 改为从仓库自身 `skills/` 生成技能索引。
 
 v1.9 变更：
 
@@ -157,7 +163,7 @@ v1.6 变更：
 
 1. 合并 `05-Harness` 母体资料到 `docs/harness/`。
 2. 仓库升级为可直接克隆的项目根目录模板。
-3. 默认内置本地角色技能和多工具适配文件。
+3. 默认内置角色技能和多工具适配文件。
 
 ## 八、维护原则
 

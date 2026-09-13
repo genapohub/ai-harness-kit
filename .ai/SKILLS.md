@@ -1,12 +1,11 @@
 # 项目已安装 Skills
 
-来源: 仓库内置 skills/（由 日常办公/00-Skills汇总 同步）
-同步日期: 2026-09-13
+来源: 仓库内置 skills/（ai-harness-kit 自维护，不再依赖外部 00-Skills 汇总）
+维护日期: 2026-09-13
+技能数量: 14
 
 | Skill | 路径 |
 |---|---|
-| mvp-expert-team | skills/mvp-expert-team |
-| b2b-need-mining-guide | skills/b2b-need-mining-guide |
 | backend-dev-guide | skills/backend-dev-guide |
 | data-analyst-guide | skills/data-analyst-guide |
 | devops-guide | skills/devops-guide |
