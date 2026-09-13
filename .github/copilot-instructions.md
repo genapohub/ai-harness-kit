@@ -5,10 +5,12 @@
 1. `AGENTS.md`
 2. `project-tracker.md`
 3. `SECURITY.md`
-4. `skills/` 中已安装的角色技能
+4. `.ai/SKILLS.md` 与 `.ai/skills-manifest.json`
+5. `skills/` 中已克隆的角色技能
 
 默认工作要求：
 
+- 如果 `skills/*/SKILL.md` 不存在或数量不足，先提示运行 `python3 scripts/clone-skills.py` 拉取 14 个角色技能。
 - 按项目现有架构和命名约定实现。
 - 新功能必须补测试或说明无法补测试的原因。
 - 不生成硬编码密钥、客户隐私数据、生产环境连接信息。

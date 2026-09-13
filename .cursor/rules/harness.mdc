@@ -3,7 +3,9 @@ description: Harness project governance
 alwaysApply: true
 ---
 
-开工前先读项目根目录 `AGENTS.md`、`project-tracker.md` 和 `SECURITY.md`。
+开工前先读项目根目录 `AGENTS.md`、`project-tracker.md`、`SECURITY.md`、`.ai/SKILLS.md` 和 `.ai/skills-manifest.json`。
+
+如果 `skills/*/SKILL.md` 不存在或数量不足，先提示运行 `python3 scripts/clone-skills.py` 拉取 14 个角色技能。
 
 必须遵守：
 

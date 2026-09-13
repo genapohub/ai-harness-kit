@@ -11,7 +11,7 @@
 
 1. `AGENTS.md`：AI 行为宪法，约束角色、工作流、红线、review。
 2. `project-tracker.md`：项目状态单一事实源，记录 WIP、风险、决策、交接。
-3. `skills/` + `.ai/SKILLS.md`：项目可用角色技能库。
+3. `.ai/skills-manifest.json` + `.ai/SKILLS.md`：项目可用角色技能清单。
 4. `evals/` + 多工具适配文件：用回归检查和工具规则守住产出质量。
 
 ## 二、对外用户怎么用
@@ -24,7 +24,13 @@
 2. 点击 `Use this template`
 3. 创建你的业务项目仓库
 4. 克隆新业务仓库到本地
-5. 改完下面 3 个文件就可以开工：
+5. 按提示拉取 14 个角色技能：
+
+```bash
+python3 scripts/clone-skills.py
+```
+
+6. 改完下面 3 个文件就可以开工：
    - `AGENTS.md`：项目目标、目标用户、技术栈、AI 角色、红线
    - `project-tracker.md`：当前阶段、WIP、风险、决策
    - `.ai/SKILLS.md`：本项目启用哪些角色技能
@@ -46,6 +52,12 @@ git clone git@github.com:genapohub/ai-harness-kit.git your-project
 
 克隆完成后，`your-project/` 就已经是带 AI 编程治理能力的项目根目录，不需要额外执行装机脚本。
 
+初始克隆不包含 `skills/` 下的角色技能内容。第一次任务对话或开工前运行：
+
+```bash
+python3 scripts/clone-skills.py
+```
+
 ### 路径 C：已有项目，复制治理资产
 
 适合：项目已经存在，并且已经有自己的 `.git`。
@@ -61,8 +73,8 @@ SECURITY.md
 .cursor/
 .github/
 .kiro/
-skills/
 evals/
+scripts/
 ```
 
 复制后先改 3 个入口文件：`AGENTS.md`、`project-tracker.md`、`.ai/SKILLS.md`。
@@ -74,12 +86,14 @@ your-project/
 ├── AGENTS.md                  # AI 行为宪法：项目身份、角色、红线、工作流
 ├── project-tracker.md         # 项目状态单一事实源：WIP、风险、决策、AI 交接
 ├── SECURITY.md                # 安全子法：密钥、脱敏、模型路由、事故响应
-├── .ai/SKILLS.md              # 项目技能索引
+├── .ai/SKILLS.md              # 项目技能清单
+├── .ai/skills-manifest.json   # 14 个角色技能仓库清单
+├── .ai/harness.variables.example.json # 项目动态变量样例
 ├── .claude/settings.json      # Claude Code 权限建议
 ├── .cursor/rules/harness.mdc  # Cursor 项目规则
 ├── .github/                   # Copilot 指令 + PR 模板
 ├── .kiro/steering/harness.md  # Kiro steering
-├── skills/                    # 仓库内置角色技能库，默认内置 14 个技能
+├── skills/                    # 初始为空，按需克隆 14 个独立角色技能仓库
 ├── evals/                     # AI 产出质量回归检查
 ├── scripts/                   # 维护脚本，日常使用无需先执行
 └── docs/harness/              # 05 沉淀 + ai-harness-kit 主线迭代记录
@@ -98,7 +112,7 @@ your-project/
 | AI 行为规范 | `AGENTS.md` |
 | 项目状态持久化 | `project-tracker.md` |
 | 安全红线 | `SECURITY.md` |
-| 内置角色技能 | `skills/` + `.ai/SKILLS.md` |
+| 角色技能清单 | `.ai/skills-manifest.json` + `.ai/SKILLS.md` |
 | Claude Code 适配 | `.claude/settings.json` |
 | Cursor 适配 | `.cursor/rules/harness.mdc` |
 | GitHub Copilot 适配 | `.github/copilot-instructions.md` |
@@ -117,7 +131,15 @@ your-project/
 
 ## 六、角色技能维护
 
-以后角色技能只维护本仓库的 `skills/` 目录。每个角色技能仍保留一个同名 GitHub 仓库，用于独立分发与版本同步：
+`ai-harness-kit` 主仓库推送时过滤 `skills/` 内容，只保留 `skills/.gitkeep` 占位。初始克隆后，按清单拉取 14 个同名独立技能仓库：
+
+```bash
+python3 scripts/clone-skills.py
+```
+
+以后任务对话里，如果 AI 发现 `skills/` 为空或缺少 `SKILL.md`，必须先提示并执行上面的克隆动作，再使用角色技能。
+
+角色技能维护入口仍是本地 `ai-harness-kit/skills/<skill-name>/`，但每个角色技能都作为同名 GitHub 仓库单独维护和推送：
 
 ```text
 skills/frontend-dev-guide  <->  https://github.com/genapohub/frontend-dev-guide
@@ -127,11 +149,44 @@ skills/backend-dev-guide   <->  https://github.com/genapohub/backend-dev-guide
 维护规则：
 
 1. 修改角色技能时，先改 `ai-harness-kit/skills/<skill-name>/`。
-2. 变更稳定后，同步到 `https://github.com/genapohub/<skill-name>`。
-3. 运行 `bash scripts/refresh-skills.sh` 刷新 `.ai/SKILLS.md`。
-4. 运行 `python3 scripts/check-skill-repos.py` 检查本地内置技能与同名远程仓库是否一致。
+2. 在对应技能目录里单独 commit 并 push 到 `https://github.com/genapohub/<skill-name>`。
+3. 回到 `ai-harness-kit` 主仓库，运行 `bash scripts/refresh-skills.sh` 刷新 `.ai/SKILLS.md`。
+4. 运行 `python3 scripts/check-skill-repos.py` 检查本地技能与同名远程仓库是否一致。
+5. `ai-harness-kit` 主仓库只提交清单、脚本和治理文件，不提交 `skills/<skill-name>/` 内容。
 
-## 七、质量检查
+批量推送技能仓库：
+
+```bash
+python3 scripts/push-skills.py
+```
+
+只检查不推送：
+
+```bash
+python3 scripts/push-skills.py --dry-run
+```
+
+## 七、动态变量
+
+模板里的项目字段统一使用 `{{VARIABLE_NAME}}` 占位。新项目从样例复制一份变量文件：
+
+```bash
+cp .ai/harness.variables.example.json .ai/harness.variables.json
+```
+
+填好后检查变量是否完整：
+
+```bash
+python3 scripts/apply-variables.py --check
+```
+
+需要把变量渲染进当前项目文件时运行：
+
+```bash
+python3 scripts/apply-variables.py
+```
+
+## 八、质量检查
 
 日常使用不需要先跑脚本。需要验收 AI 产出时，可以运行：
 
@@ -152,9 +207,16 @@ python3 evals/runner.py . --since HEAD~1
 python3 scripts/check-skill-repos.py
 ```
 
-## 八、版本
+## 九、版本
 
-当前版本：`harness-v1.11`
+当前版本：`harness-v1.12`
+
+v1.12 变更：
+
+1. `ai-harness-kit` 主仓库推送过滤 `skills/` 内容，只保留技能清单与空目录占位。
+2. 初始克隆后通过 `python3 scripts/clone-skills.py` 拉取 14 个独立技能仓库。
+3. 新增 `scripts/push-skills.py`，支持 14 个角色技能独立仓库逐个推送。
+4. 新增 `.ai/harness.variables.example.json` 与 `scripts/apply-variables.py`，统一项目动态变量字段。
 
 v1.11 变更：
 
@@ -194,7 +256,7 @@ v1.6 变更：
 2. 仓库升级为可直接克隆的项目根目录模板。
 3. 默认内置角色技能和多工具适配文件。
 
-## 九、维护原则
+## 十、维护原则
 
 1. 以后只维护 `ai-harness-kit`。
 2. 不再保留 `05-Harness` / `06-harness-kit` 多套分叉；`08-ai-dev-suite` 原始内容待备份恢复后补入 `ai-harness-kit`。

@@ -1,6 +1,8 @@
 # Harness Steering
 
-所有 Kiro spec / task / implementation 都必须遵守项目根目录的 `AGENTS.md`、`project-tracker.md` 和 `SECURITY.md`。
+所有 Kiro spec / task / implementation 都必须遵守项目根目录的 `AGENTS.md`、`project-tracker.md`、`SECURITY.md`、`.ai/SKILLS.md` 和 `.ai/skills-manifest.json`。
+
+如果 `skills/*/SKILL.md` 不存在或数量不足，先提示运行 `python3 scripts/clone-skills.py` 拉取 14 个角色技能。
 
 执行顺序：
 

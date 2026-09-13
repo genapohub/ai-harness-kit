@@ -1,9 +1,0 @@
-.DS_Store
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-__pycache__/
-*.py[cod]
-node_modules/

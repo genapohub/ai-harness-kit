@@ -4,7 +4,10 @@ __pycache__/
 .env.*
 !.env.example
 .workbuddy/
+.ai/harness.variables.json
 evals/reports/
+skills/*
+!skills/.gitkeep
 node_modules/
 dist/
 build/

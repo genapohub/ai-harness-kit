@@ -2,7 +2,7 @@
 
 > 适用于 Claude Code / Cursor / Aider / Continue 等所有支持 AGENTS.md 规范的 AI 编程工具。
 > **本文件是宪法**：所有 AI 在本项目里做什么、不做什么、怎么做，必须遵守本文档。
-> 项目级文件，复制到你的项目根目录，按需修改 `【项目名】` `【技术栈】` 等占位符。
+> 项目级文件，复制到你的项目根目录，按需修改 `{{PROJECT_NAME}}` `{{TECH_STACK}}` 等动态变量字段。
 
 ---
 
@@ -10,19 +10,19 @@
 
 ```yaml
 # === 项目基本信息 ===
-项目名：【你的项目名】
-项目目标：一句话说明这项目解决什么问题
-目标用户：谁会用这个产品
-技术栈：前端 / 后端 / 数据库 / 部署
-代码仓库：git@github.com:org/repo.git
-主要分支：main（受保护）/ develop（开发）
-当前阶段：MVP / 迭代中 / 维护期 / 重构中
+项目名：{{PROJECT_NAME}}
+项目目标：{{PROJECT_GOAL}}
+目标用户：{{TARGET_USERS}}
+技术栈：{{TECH_STACK}}
+代码仓库：{{REPOSITORY_URL}}
+主要分支：{{MAIN_BRANCH}}（受保护）/ {{DEV_BRANCH}}（开发）
+当前阶段：{{CURRENT_STAGE}}
 项目知识地图：                  # AI 取业务上下文的索引（v1.2）；没有的行删掉，禁止凭空猜业务规则
-  业务背景：【需求文档/PRD 路径】
-  接口协议：【API 文档路径】
-  数据模型：【ER 图/数据模型文档路径】
-  设计规范：【UI/设计系统文档路径】
-  部署运维：【部署清单/运维手册路径】
+  业务背景：{{BUSINESS_DOC}}
+  接口协议：{{API_DOC}}
+  数据模型：{{DATA_MODEL_DOC}}
+  设计规范：{{DESIGN_DOC}}
+  部署运维：{{DEPLOY_DOC}}
 ```
 
 > **AI 必须做的事**：进入项目第一件事是读这份 YAML，理解项目背景再动手；需要业务上下文时按「项目知识地图」取，不要猜。
@@ -35,7 +35,7 @@
 ```yaml
 # === AI 在本项目的角色 ===
 主导级别：对话协作（AI 建议，人类审核）    # 不要轻易升级到"AI 主导"；人类"继续开发"≠ 免 review 合并，连续任务序列合并需人类明示"连续模式"（合并后仍需事后 review，可 revert）
-触发场景：【所有改动 / 仅新功能 / 仅重构 / 仅测试】
+触发场景：{{AI_TRIGGER_SCOPE}}
 激活角色清单：                             # P0=常驻 / P1=按阶段激活 / P2=挂起；按你的团队角色体系定义，未勾选的角色不得被调度
   P0_常驻：【tech-lead-guide / frontend-dev-guide / backend-dev-guide / qa-testing-guide / devops-guide / team-orchestrator，按项目类型删减】
   P1_阶段激活：【按阶段勾选：product-plan-guide（需求/迭代）/ ui-designer-guide（UI 方案/视觉执行）/ data-analyst-guide（埋点/指标）】
@@ -122,7 +122,8 @@
 每个任务必须按以下流程执行：
 
 ```
-1. 读上下文（AGENTS.md + 相关代码 + 最近 3 次 commit）
+1. 读上下文（AGENTS.md + project-tracker.md + .ai/SKILLS.md + 相关代码 + 最近 3 次 commit）
+1.1 检查角色技能：如 `skills/*/SKILL.md` 不存在或数量不足，先提示并运行 `python3 scripts/clone-skills.py`
 2. 明确需求（向人类复述确认，不懂的问而不是猜）
 3. 写方案（小改动 1-3 句话说明思路，大改动写设计文档）
 4. 写代码（按 第七部分 代码规范）
@@ -297,6 +298,7 @@ Code Review 沟通：
 5. **第七部分（代码规范）和项目已有 ESLint / Pylint 配置对齐**，冲突时以工具配置为准
 6. **第八部分 checklist 跑通才能提 PR**
 7. **`evals/regression-cases.json` 套件**配合本文件使用，作为回归测试基线
+8. **初始克隆不包含角色技能内容**，需要按 `.ai/skills-manifest.json` 运行 `python3 scripts/clone-skills.py`
 
 ---
 
@@ -306,8 +308,9 @@ Code Review 沟通：
 本文件（AGENTS.md）= 行为规范 / 宪法
 ├── project-tracker.md = 任务状态持久化（项目根目录）
 ├── SECURITY.md = 密钥 / 脱敏 / 合规三件套（项目根目录）
-├── skills/ = 项目已安装角色技能
-├── .ai/SKILLS.md = 技能索引
+├── skills/ = 按需克隆的 14 个独立角色技能仓库（主仓库不跟踪内容）
+├── .ai/skills-manifest.json = 技能仓库清单
+├── .ai/SKILLS.md = 技能索引与克隆提示
 ├── evals/regression-cases.json = AI 产出物回归测试基线
 ├── .claude / .cursor / .github / .kiro = 多 AI 工具适配
 └── docs/harness/ = Harness 调研、实战与工具链历史沉淀
@@ -355,6 +358,12 @@ git push origin harness-v1.1
 每次打 tag 必须同步更新本节：
 
 ```markdown
+## harness-v1.12（2026-09-14）
+- `ai-harness-kit` 主仓库过滤 `skills/` 内容，只保留技能清单和空目录占位
+- 初始克隆后通过 `python3 scripts/clone-skills.py` 拉取 14 个独立技能仓库
+- 新增 `scripts/push-skills.py`，支持 14 个角色技能独立仓库逐个推送
+- 新增 `.ai/harness.variables.example.json` 与 `scripts/apply-variables.py`，统一项目动态变量字段
+
 ## harness-v1.11（2026-09-14）
 - 明确 `ai-harness-kit/skills/` 是角色技能维护入口
 - 明确每个角色技能仍与 GitHub 同名独立仓库保持一致
@@ -437,4 +446,4 @@ git push origin harness-v1.0.1-revert
 ---
 
 > _维护原则：先骨架再追加细节。本模板先用默认值跑 2 周，再按实际踩坑迭代。_
-> _版本：v1.11（2026-09-14）· ai-harness-kit_
+> _版本：v1.12（2026-09-14）· ai-harness-kit_

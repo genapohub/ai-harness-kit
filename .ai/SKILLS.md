@@ -1,6 +1,7 @@
-# 项目已安装 Skills
+# 项目 Skills 清单
 
-来源: 仓库内置 skills/（ai-harness-kit 自维护，不再依赖外部 00-Skills 汇总）
+来源: `.ai/skills-manifest.json`
+维护方式: 初始克隆不包含 `skills/` 内容；按需运行 `python3 scripts/clone-skills.py` 拉取 14 个独立技能仓库。
 维护日期: 2026-09-14
 技能数量: 14
 

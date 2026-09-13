@@ -1,34 +1,36 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 TODAY="$(date +%Y-%m-%d)"
-SKILLS_DIR="$ROOT/skills"
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+MANIFEST="$ROOT/.ai/skills-manifest.json"
 INDEX="$ROOT/.ai/SKILLS.md"
 
-[ -d "$SKILLS_DIR" ] || { echo "内置 skills 目录不存在: $SKILLS_DIR"; exit 1; }
+python3 - "$MANIFEST" "$INDEX" "$TODAY" <<'PY'
+import json
+import sys
+from pathlib import Path
 
-mkdir -p "$ROOT/.ai"
+manifest_path = Path(sys.argv[1])
+index_path = Path(sys.argv[2])
+today = sys.argv[3]
+manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+skills = manifest["skills"]
 
-installed=()
-while IFS= read -r skill_file; do
-  skill_dir="$(dirname "$skill_file")"
-  skill_name="$(basename "$skill_dir")"
-  installed+=("$skill_name")
-done < <(find "$SKILLS_DIR" -mindepth 2 -maxdepth 2 -name SKILL.md -type f | sort)
+lines = [
+    "# 项目 Skills 清单",
+    "",
+    "来源: `.ai/skills-manifest.json`",
+    "维护方式: 初始克隆不包含 `skills/` 内容；按需运行 `python3 scripts/clone-skills.py` 拉取 14 个独立技能仓库。",
+    f"维护日期: {today}",
+    f"技能数量: {len(skills)}",
+    "",
+    "| Skill | 本地路径 | 独立仓库 |",
+    "|---|---|---|",
+]
+for skill in skills:
+    lines.append(f"| {skill['name']} | {skill['path']} | {skill['repo_https'][:-4]} |")
 
-{
-  echo "# 项目已安装 Skills"
-  echo ""
-  echo "来源: 仓库内置 skills/（ai-harness-kit 自维护，不再依赖外部 00-Skills 汇总）"
-  echo "维护日期: $TODAY"
-  echo "技能数量: ${#installed[@]}"
-  echo ""
-  echo "| Skill | 本地路径 | 独立仓库 |"
-  echo "|---|---|---|"
-  for name in "${installed[@]}"; do
-    echo "| $name | skills/$name | https://github.com/genapohub/$name |"
-  done
-} > "$INDEX"
-
-echo "skills index refreshed: ${#installed[@]}"
+index_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+print(f"skills index refreshed from manifest: {len(skills)}")
+PY

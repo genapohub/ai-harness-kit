@@ -9,6 +9,11 @@
       "Bash(git status:*)",
       "Bash(git diff:*)",
       "Bash(git log:*)",
+      "Bash(python3 scripts/clone-skills.py:*)",
+      "Bash(python3 scripts/check-skill-repos.py:*)",
+      "Bash(python3 scripts/push-skills.py --dry-run:*)",
+      "Bash(python3 scripts/apply-variables.py --check:*)",
+      "Bash(bash scripts/refresh-skills.sh:*)",
       "Bash(npm test:*)",
       "Bash(pytest:*)"
     ],
