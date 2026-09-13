@@ -17,7 +17,7 @@
 关联 AGENTS.md：【AGENTS.md 路径】
 关联仓库：【git@github.com:org/repo.git】
 当前分支：【branch】
-Harness 版本：v1.10
+Harness 版本：v1.11
 ```
 
 ---
@@ -127,6 +127,7 @@ Harness 版本：v1.10
 
 | 版本 | 日期 | 主要变更 | 责任人 |
 |---|---|---|---|
+| v1.11 | 09-14 | 技能维护口径修正：kit 内 skills 为维护入口，14 个同名 GitHub 技能仓库保持一致 | 哥拿坡 |
 | v1.10 | 09-13 | 技能主源收敛到 ai-harness-kit/skills，索引更新为 14 个内置技能 | 哥拿坡 |
 | v1.9 | 09-13 | 对外使用入口升级：Template、Clone、已有项目复制三路径；GitHub 开启模板仓库 | 哥拿坡 |
 | v1.8 | 09-13 | 仓库统一命名为 ai-harness-kit，远程地址切换为 genapohub/ai-harness-kit | 哥拿坡 |
@@ -146,4 +147,4 @@ Harness 版本：v1.10
 ---
 
 > _本文件是 Harness L2 State 层的物理实现，配合 AGENTS.md 使用。_
-> _版本：v1.10（2026-09-13）· ai-harness-kit_
+> _版本：v1.11（2026-09-14）· ai-harness-kit_

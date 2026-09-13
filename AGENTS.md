@@ -355,6 +355,12 @@ git push origin harness-v1.1
 每次打 tag 必须同步更新本节：
 
 ```markdown
+## harness-v1.11（2026-09-14）
+- 明确 `ai-harness-kit/skills/` 是角色技能维护入口
+- 明确每个角色技能仍与 GitHub 同名独立仓库保持一致
+- 新增 `scripts/check-skill-repos.py`，检查内置技能与独立仓库内容差异
+- `.ai/SKILLS.md` 增加独立仓库链接列
+
 ## harness-v1.10（2026-09-13）
 - 技能主源收敛到 `ai-harness-kit/skills/`，不再依赖外部 `00-Skills汇总`
 - `.ai/SKILLS.md` 按当前 14 个内置技能重建索引
@@ -431,4 +437,4 @@ git push origin harness-v1.0.1-revert
 ---
 
 > _维护原则：先骨架再追加细节。本模板先用默认值跑 2 周，再按实际踩坑迭代。_
-> _版本：v1.10（2026-09-13）· ai-harness-kit_
+> _版本：v1.11（2026-09-14）· ai-harness-kit_

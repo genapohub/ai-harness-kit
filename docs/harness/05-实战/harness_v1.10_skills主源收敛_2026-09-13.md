@@ -1,7 +1,7 @@
 # harness v1.10 · Skills 主源收敛记录
 
 > 日期：2026-09-13
-> 结论：`ai-harness-kit` 内置 `skills/` 成为角色技能唯一主源，不再依赖外部 `00-Skills汇总` 同步。
+> 结论：`ai-harness-kit` 内置 `skills/` 成为套件内角色技能维护入口，不再依赖外部 `00-Skills汇总` 同步。v1.11 补充：每个角色技能仍保留 GitHub 同名独立仓库，并要求保持一致。
 
 ## 一、调整背景
 
@@ -37,13 +37,15 @@
 
 ## 四、维护规则
 
-以后新增、删除或更新角色技能时，只维护 `ai-harness-kit/skills/`。更新完成后运行：
+以后新增、删除或更新角色技能时，先维护 `ai-harness-kit/skills/`。更新完成后运行：
 
 ```bash
 bash scripts/refresh-skills.sh
 ```
 
 该脚本只刷新 `.ai/SKILLS.md` 索引，不再复制外部技能目录。
+
+v1.11 补充规则：`skills/<skill-name>/` 与 `https://github.com/genapohub/<skill-name>` 必须保持一致。
 
 ---
 

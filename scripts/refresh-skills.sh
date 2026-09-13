@@ -24,10 +24,10 @@ done < <(find "$SKILLS_DIR" -mindepth 2 -maxdepth 2 -name SKILL.md -type f | sor
   echo "维护日期: $TODAY"
   echo "技能数量: ${#installed[@]}"
   echo ""
-  echo "| Skill | 路径 |"
-  echo "|---|---|"
+  echo "| Skill | 本地路径 | 独立仓库 |"
+  echo "|---|---|---|"
   for name in "${installed[@]}"; do
-    echo "| $name | skills/$name |"
+    echo "| $name | skills/$name | https://github.com/genapohub/$name |"
   done
 } > "$INDEX"
 

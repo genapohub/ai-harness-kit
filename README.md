@@ -115,7 +115,23 @@ your-project/
 4. Kiro：读取 `.kiro/steering/harness.md`。
 5. 团队协作：每次重要变更都同步更新 `project-tracker.md`。
 
-## 六、质量检查
+## 六、角色技能维护
+
+以后角色技能只维护本仓库的 `skills/` 目录。每个角色技能仍保留一个同名 GitHub 仓库，用于独立分发与版本同步：
+
+```text
+skills/frontend-dev-guide  <->  https://github.com/genapohub/frontend-dev-guide
+skills/backend-dev-guide   <->  https://github.com/genapohub/backend-dev-guide
+```
+
+维护规则：
+
+1. 修改角色技能时，先改 `ai-harness-kit/skills/<skill-name>/`。
+2. 变更稳定后，同步到 `https://github.com/genapohub/<skill-name>`。
+3. 运行 `bash scripts/refresh-skills.sh` 刷新 `.ai/SKILLS.md`。
+4. 运行 `python3 scripts/check-skill-repos.py` 检查本地内置技能与同名远程仓库是否一致。
+
+## 七、质量检查
 
 日常使用不需要先跑脚本。需要验收 AI 产出时，可以运行：
 
@@ -130,9 +146,22 @@ python3 evals/runner.py . --since HEAD~1
 3. 是否有常见密钥泄露。
 4. 新增 commit message 是否符合约定。
 
-## 七、版本
+技能仓库一致性检查：
 
-当前版本：`harness-v1.10`
+```bash
+python3 scripts/check-skill-repos.py
+```
+
+## 八、版本
+
+当前版本：`harness-v1.11`
+
+v1.11 变更：
+
+1. 明确 `ai-harness-kit/skills/` 是角色技能维护入口。
+2. 明确每个角色技能仍与 GitHub 同名独立仓库保持一致。
+3. 新增 `scripts/check-skill-repos.py`，检查内置技能与独立仓库内容差异。
+4. `.ai/SKILLS.md` 增加独立仓库链接列。
 
 v1.10 变更：
 
@@ -165,7 +194,7 @@ v1.6 变更：
 2. 仓库升级为可直接克隆的项目根目录模板。
 3. 默认内置角色技能和多工具适配文件。
 
-## 八、维护原则
+## 九、维护原则
 
 1. 以后只维护 `ai-harness-kit`。
 2. 不再保留 `05-Harness` / `06-harness-kit` 多套分叉；`08-ai-dev-suite` 原始内容待备份恢复后补入 `ai-harness-kit`。
