@@ -11,6 +11,8 @@ skills/*
 # docs/harness 下除通用 README 外，均为维护者本地资料，不随模板分发（本地保留）
 docs/harness/*
 !docs/harness/README.md
+# scripts/ 为维护者本地工具，不随模板分发（本地保留）
+/scripts/
 node_modules/
 dist/
 build/

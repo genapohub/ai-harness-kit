@@ -38,22 +38,21 @@ git clone git@github.com:genapohub/ai-harness-kit.git your-project
 想固定版本而不是跟随最新改动（版本列表见 §九）：
 
 ```bash
-git clone -b harness-v1.19 https://github.com/genapohub/ai-harness-kit.git your-project
+git clone -b harness-v1.20 https://github.com/genapohub/ai-harness-kit.git your-project
 ```
 
 ### 克隆后第一步：拉取角色技能
 
-初始克隆不包含 `skills/` 下的角色技能内容（主仓库只保留 `.gitkeep` 占位）。首次任务对话或开工前运行一次：
+初始克隆不包含 `skills/` 下的角色技能内容（仓库只保留 `.gitkeep` 占位）。
+
+**任务对话中，如果 AI 发现 `skills/*/SKILL.md` 缺失，会主动提示你拉取技能**——这是 `AGENTS.md` 工作流第 1.1 步的强制要求。完整命令清单在 **`.ai/SKILLS.md`**，按需只拉本项目启用的那几个即可，例如：
 
 ```bash
-python3 scripts/clone-skills.py
+git clone https://github.com/genapohub/product-plan-guide.git skills/product-plan-guide
+git clone https://github.com/genapohub/frontend-dev-guide.git skills/frontend-dev-guide
 ```
 
-维护者若要把技能仓库克隆成 SSH remote 方便后续推送：
-
-```bash
-python3 scripts/clone-skills.py --protocol ssh
-```
+14 个技能仓的完整清单见 §六。
 
 ### 克隆后第二步：改三个入口文件
 
@@ -73,11 +72,10 @@ SECURITY.md
 .github/
 .kiro/
 evals/
-scripts/       # 可选：clone-skills.py 等维护脚本
 docs/          # 可选：Harness 方法论速览，不需要可略过
 ```
 
-复制后改上面三个入口文件即可开工。以后要拉取角色技能，在这个项目里运行 `python3 scripts/clone-skills.py`。
+复制后改上面三个入口文件即可开工。以后要拉取角色技能，按 `.ai/SKILLS.md` 里的命令逐个 clone 即可。
 
 ## 三、项目结构
 
@@ -95,7 +93,6 @@ your-project/
 ├── .kiro/steering/harness.md  # Kiro steering
 ├── skills/                    # 初始为空，按需克隆 14 个独立角色技能仓库
 ├── evals/                     # AI 产出质量回归检查
-├── scripts/                   # 维护脚本，日常使用无需先执行
 └── docs/harness/              # Harness 方法论速览（可选），外部项目可删
 ```
 
@@ -133,62 +130,20 @@ your-project/
 
 ## 六、角色技能维护
 
-`ai-harness-kit` 主仓库推送时过滤 `skills/` 内容，只保留 `skills/.gitkeep` 占位。初始克隆后，按清单拉取 14 个同名独立技能仓库：
+`ai-harness-kit` 主仓库推送时过滤 `skills/` 内容，只保留 `skills/.gitkeep` 占位。14 个角色技能各自是独立 GitHub 仓库，完整清单与拉取命令见 `.ai/SKILLS.md`。
 
-```bash
-python3 scripts/clone-skills.py
-```
-
-以后任务对话里，如果 AI 发现 `skills/` 为空或缺少 `SKILL.md`，必须先提示并执行上面的克隆动作，再使用角色技能。
-
-角色技能维护入口仍是本地 `ai-harness-kit/skills/<skill-name>/`，但每个角色技能都作为同名 GitHub 仓库单独维护和推送：
-
-```text
-skills/frontend-dev-guide  <->  https://github.com/genapohub/frontend-dev-guide
-skills/backend-dev-guide   <->  https://github.com/genapohub/backend-dev-guide
-```
+任务对话里，如果 AI 发现 `skills/` 为空或缺少 `SKILL.md`，**必须先提示你拉取技能**，再使用角色技能——这是 `AGENTS.md` 工作流第 1.1 步的强制要求。
 
 维护规则：
 
-1. 修改角色技能时，先改 `ai-harness-kit/skills/<skill-name>/`。
-2. 在对应技能目录里单独 commit 并 push 到 `https://github.com/genapohub/<skill-name>`。
-3. 回到 `ai-harness-kit` 主仓库，运行 `bash scripts/refresh-skills.sh` 刷新 `.ai/SKILLS.md`。
-4. 运行 `python3 scripts/check-skill-repos.py` 检查本地技能与同名远程仓库是否一致。
-5. `ai-harness-kit` 主仓库只提交清单、脚本和治理文件，不提交 `skills/<skill-name>/` 内容。
-
-批量推送技能仓库：
-
-```bash
-python3 scripts/push-skills.py
-```
-
-只检查不推送：
-
-```bash
-python3 scripts/push-skills.py --dry-run
-```
-
-如果技能目录是用 HTTPS 克隆的，推送需要 GitHub 登录凭据；维护者更推荐用 `python3 scripts/clone-skills.py --protocol ssh` 克隆技能仓库。
+1. 修改角色技能时，直接改那个技能仓库的工作副本。
+2. 在对应技能目录里 commit 并 push 到 `https://github.com/genapohub/<skill-name>`。
+3. `ai-harness-kit` 主仓库不提交 `skills/<skill-name>/` 内容，只提交清单与治理文件。
+4. 新增或删除角色技能时，同步更新 `.ai/skills-manifest.json` 与 `.ai/SKILLS.md` 两张清单。
 
 ## 七、动态变量
 
-模板里的项目字段统一使用 `{{VARIABLE_NAME}}` 占位。新项目从样例复制一份变量文件：
-
-```bash
-cp .ai/harness.variables.example.json .ai/harness.variables.json
-```
-
-填好后检查变量是否完整：
-
-```bash
-python3 scripts/apply-variables.py --check
-```
-
-需要把变量渲染进当前项目文件时运行：
-
-```bash
-python3 scripts/apply-variables.py
-```
+模板里的项目字段统一使用 `{{VARIABLE_NAME}}` 占位，样例见 `.ai/harness.variables.example.json`。按项目实际情况把用到的 `{{...}}` 逐个替换即可，未替换的占位符不影响治理文件本身运转。
 
 ## 八、质量检查
 
@@ -211,24 +166,23 @@ python3 evals/runner.py . --since HEAD~1
 
 ### PR 门禁（evals-gate）
 
-想要把质量检查变成合并前的硬约束，把仓库里的工作流模板复制到项目：
+想要把质量检查变成合并前的硬约束，把仓库里的工作流模板启用到位：
 
 ```bash
-mkdir -p .github/workflows
-cp scripts/templates/evals-gate.yml .github/workflows/evals-gate.yml
+cp .github/workflows/evals-gate.yml.example .github/workflows/evals-gate.yml
 ```
 
 它在 PR 或 push 到 `main` 时自动执行 `python3 evals/runner.py . --since HEAD~1`。默认 `continue-on-error: true`（只收集基线、不挡合并）；观察几轮、确认误报都已豁免后，删掉那一行即变硬门禁。
 
-技能仓库一致性检查：
-
-```bash
-python3 scripts/check-skill-repos.py
-```
-
 ## 九、版本
 
-当前版本：`harness-v1.19`
+当前版本：`harness-v1.20`
+
+v1.20 变更：
+
+1. **移除全部 `scripts/` 维护脚本**（不再随仓库分发）：拉取角色技能改为在 `.ai/SKILLS.md` 中逐条 `git clone`，动态变量改为手动替换占位符。
+2. **保留并强化「拉技能」提示机制**：`AGENTS.md` 工作流第 1.1 步要求 AI 发现 `skills/*/SKILL.md` 缺失时必须先提示人类并给出拉取命令；README §二、§六 同步说明。
+3. PR 门禁模板移出 `scripts/`，改放 `.github/workflows/evals-gate.yml.example`，复制改名即启用。
 
 v1.19 变更：
 

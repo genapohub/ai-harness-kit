@@ -123,7 +123,7 @@
 
 ```
 1. 读上下文（AGENTS.md + project-tracker.md + .ai/SKILLS.md + 相关代码 + 最近 3 次 commit）
-1.1 检查角色技能：如 `skills/*/SKILL.md` 不存在或数量不足，先提示并运行 `python3 scripts/clone-skills.py`
+1.1 检查角色技能：按 `.ai/SKILLS.md` 确认本项目启用的角色技能；若 `skills/*/SKILL.md` 不存在或数量不足，**必须先向人类提示「角色技能尚未拉取」并给出 `.ai/SKILLS.md` 中的拉取命令**，待人类确认后再继续——不得在缺少技能的情况下假装具备该角色能力
 2. 明确需求（向人类复述确认，不懂的问而不是猜）
 3. 写方案（小改动 1-3 句话说明思路，大改动写设计文档）
 4. 写代码（按 第七部分 代码规范）
@@ -298,7 +298,7 @@ Code Review 沟通：
 5. **第七部分（代码规范）和项目已有 ESLint / Pylint 配置对齐**，冲突时以工具配置为准
 6. **第八部分 checklist 跑通才能提 PR**
 7. **`evals/regression-cases.json` 套件**配合本文件使用，作为回归测试基线
-8. **初始克隆不包含角色技能内容**，需要按 `.ai/skills-manifest.json` 运行 `python3 scripts/clone-skills.py`
+8. **初始克隆不包含角色技能内容**，任务对话中 AI 发现技能缺失须先提示，按 `.ai/SKILLS.md` 的命令逐个 clone 拉取
 
 ---
 
@@ -358,6 +358,12 @@ git push origin harness-v1.1
 每次打 tag 必须同步更新本节：
 
 ```markdown
+## harness-v1.20（2026-09-14）
+- 移除全部 `scripts/` 维护脚本（不再随仓库分发，本地保留）：拉技能改为 `.ai/SKILLS.md` 中逐条 `git clone`，动态变量改为手动替换占位符
+- 保留并强化「拉技能」提示机制：工作流第 1.1 步要求 AI 发现 `skills/*/SKILL.md` 缺失时必须先提示人类并给出拉取命令
+- PR 门禁模板由 `scripts/templates/evals-gate.yml` 移至 `.github/workflows/evals-gate.yml.example`，复制改名即启用
+- 中英文 README、`.ai/SKILLS.md` 同步更新
+
 ## harness-v1.19（2026-09-14）
 - 移除装机脚本 `scripts/init-harness.py`：kit 不再携带任何「铺壳 / 注入」脚本，对外统一为克隆到项目根目录
 - §二「例外：项目已存在」改为手动复制资产清单；PR 门禁改为从 `scripts/templates/evals-gate.yml` 复制
@@ -484,4 +490,4 @@ git push origin harness-v1.0.1-revert
 ---
 
 > _维护原则：先骨架再追加细节。本模板先用默认值跑 2 周，再按实际踩坑迭代。_
-> _版本：v1.19（2026-09-14）· ai-harness-kit_
+> _版本：v1.20（2026-09-14）· ai-harness-kit_

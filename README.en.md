@@ -38,22 +38,21 @@ git clone git@github.com:genapohub/ai-harness-kit.git your-project
 To pin a specific version instead of tracking the latest (see §9 for the version list):
 
 ```bash
-git clone -b harness-v1.19 https://github.com/genapohub/ai-harness-kit.git your-project
+git clone -b harness-v1.20 https://github.com/genapohub/ai-harness-kit.git your-project
 ```
 
 ### Step 1 after cloning: pull the role skills
 
-The initial clone does **not** include the role skills under `skills/` (the repo only keeps a `.gitkeep` placeholder). Run this once before your first task:
+The initial clone does **not** include the role skills under `skills/` (the repo only keeps a `.gitkeep` placeholder).
+
+**During a task conversation, if the AI finds `skills/*/SKILL.md` missing it will proactively tell you to pull the skills** — that is step 1.1 of the workflow in `AGENTS.md`. The full command list lives in **`.ai/SKILLS.md`**; clone only the ones your project enables, for example:
 
 ```bash
-python3 scripts/clone-skills.py
+git clone https://github.com/genapohub/product-plan-guide.git skills/product-plan-guide
+git clone https://github.com/genapohub/frontend-dev-guide.git skills/frontend-dev-guide
 ```
 
-Maintainers who want SSH remotes for pushing:
-
-```bash
-python3 scripts/clone-skills.py --protocol ssh
-```
+See §6 for the full list of 14 skill repos.
 
 ### Step 2 after cloning: edit three entry files
 
@@ -73,11 +72,10 @@ SECURITY.md
 .github/
 .kiro/
 evals/
-scripts/       # optional: clone-skills.py and other maintenance scripts
 docs/          # optional: Harness methodology primer
 ```
 
-Then edit the three entry files above and you are ready to work. To pull the role skills later, run `python3 scripts/clone-skills.py` inside that project.
+Then edit the three entry files above and you are ready to work. To pull the role skills later, clone them one by one with the commands in `.ai/SKILLS.md`.
 
 ## 3. Project structure
 
@@ -95,7 +93,6 @@ your-project/
 ├── .kiro/steering/harness.md  # Kiro steering
 ├── skills/                    # Empty initially; clone the 14 role-skill repos on demand
 ├── evals/                     # AI output quality regression checks
-├── scripts/                   # Maintenance scripts; not required for daily use
 └── docs/harness/              # Harness methodology notes (optional, deletable)
 ```
 
@@ -131,60 +128,20 @@ Recommendations:
 
 ## 6. Role-skill maintenance
 
-The `ai-harness-kit` main repo filters out `skills/` content, keeping only `skills/.gitkeep` as a placeholder. After the initial clone, pull the 14 same-named independent skill repos listed in the manifest:
+The `ai-harness-kit` main repo filters out `skills/` content, keeping only `skills/.gitkeep` as a placeholder. The 14 role skills are independent GitHub repositories — the full list and clone commands are in `.ai/SKILLS.md`.
 
-```bash
-python3 scripts/clone-skills.py
-```
-
-In later task conversations, if the AI finds `skills/` empty or missing `SKILL.md`, it must prompt and run the clone command above before using role skills.
-
-Each role skill is maintained and pushed as its own same-named GitHub repository:
-
-```text
-skills/frontend-dev-guide  <->  https://github.com/genapohub/frontend-dev-guide
-skills/backend-dev-guide   <->  https://github.com/genapohub/backend-dev-guide
-```
+In later task conversations, if the AI finds `skills/` empty or missing `SKILL.md`, **it must first prompt you to pull the skills** before using role skills — this is enforced by step 1.1 of the workflow in `AGENTS.md`.
 
 Maintenance rules:
 
-1. Edit the role skill under `ai-harness-kit/skills/<skill-name>/`.
+1. Edit the role skill in that skill repo's working copy.
 2. Commit and push it inside that skill directory to `https://github.com/genapohub/<skill-name>`.
-3. Run `bash scripts/refresh-skills.sh` in the main repo to refresh `.ai/SKILLS.md`.
-4. Run `python3 scripts/check-skill-repos.py` to verify local skills match the same-named remotes.
-5. The main repo commits only the manifest, scripts and governance files — never `skills/<skill-name>/` content.
-
-Batch-push all skill repos:
-
-```bash
-python3 scripts/push-skills.py
-```
-
-Dry run only:
-
-```bash
-python3 scripts/push-skills.py --dry-run
-```
+3. The main repo never commits `skills/<skill-name>/` content — only the manifests and governance files.
+4. When adding or removing a role skill, update both `.ai/skills-manifest.json` and `.ai/SKILLS.md`.
 
 ## 7. Dynamic variables
 
-Template fields use `{{VARIABLE_NAME}}` placeholders. For a new project, copy the example:
-
-```bash
-cp .ai/harness.variables.example.json .ai/harness.variables.json
-```
-
-After filling it in, check completeness:
-
-```bash
-python3 scripts/apply-variables.py --check
-```
-
-Render variables into the current project files:
-
-```bash
-python3 scripts/apply-variables.py
-```
+Template fields use `{{VARIABLE_NAME}}` placeholders; see `.ai/harness.variables.example.json`. Replace the `{{...}}` placeholders you actually use, one by one — unreplaced placeholders do not affect how the governance files work.
 
 ## 8. Quality checks
 
@@ -207,18 +164,22 @@ Coverage (runner v0.4, all 14 cases in `regression-cases.json`):
 
 ### PR gate (evals-gate)
 
-To turn the quality checks into a merge constraint, copy the workflow template from the repo:
+To turn the quality checks into a merge constraint, enable the workflow template shipped in the repo:
 
 ```bash
-mkdir -p .github/workflows
-cp scripts/templates/evals-gate.yml .github/workflows/evals-gate.yml
+cp .github/workflows/evals-gate.yml.example .github/workflows/evals-gate.yml
 ```
 
 It runs `python3 evals/runner.py . --since HEAD~1` on PRs or pushes to `main`. Default is `continue-on-error: true`; once false positives are handled, delete that line to make it a hard gate.
 
 ## 9. Versions
 
-Current: `harness-v1.19`
+Current: `harness-v1.20`
+
+v1.20:
+1. **All maintenance scripts under `scripts/` removed** (no longer distributed): pulling role skills is now a per-repo `git clone` list in `.ai/SKILLS.md`, and dynamic variables are replaced by hand.
+2. **The "pull your skills" prompt is kept and strengthened**: step 1.1 of the workflow in `AGENTS.md` requires the AI to prompt the human and hand over the clone commands when `skills/*/SKILL.md` is missing.
+3. The PR gate template moved out of `scripts/` to `.github/workflows/evals-gate.yml.example` — copy and rename to enable.
 
 v1.19:
 1. **Removed the install script** `scripts/init-harness.py`: the kit no longer ships any shell/inject script; the single supported path is cloning it as your project root.
@@ -245,7 +206,7 @@ Earlier versions: see [README.md](README.md#九版本).
 
 1. Maintain only `ai-harness-kit` from now on.
 2. No more forked copies; rules, skills, evals and adapters all live with the project root in version control.
-3. Prefer the GitHub Template for new projects.
+3. For new projects, clone this repo as the project root (or use `Use this template`).
 4. Update the `AGENTS.md` version section and tag `harness-vX.Y` on every stable change.
 
 ---

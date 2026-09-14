@@ -17,7 +17,7 @@
 关联 AGENTS.md：AGENTS.md
 关联仓库：{{REPOSITORY_URL}}
 当前分支：{{MAIN_BRANCH}}
-Harness 版本：v1.19
+Harness 版本：v1.20
 ```
 
 ---
@@ -127,6 +127,7 @@ Harness 版本：v1.19
 
 | 版本 | 日期 | 主要变更 | 责任人 |
 |---|---|---|---|
+| v1.20 | 09-14 | 移除全部 scripts/ 维护脚本（不再分发，本地保留）；拉技能改为 .ai/SKILLS.md 逐条 clone 并保留 AI 主动提示机制；PR 门禁模板移至 .github/workflows/*.example | 维护者 |
 | v1.19 | 09-14 | 移除装机脚本 init-harness.py，kit 不再携带铺壳/注入脚本；例外路径改手动复制，PR 门禁改复制模板 | 维护者 |
 | v1.18 | 09-14 | 对外使用收敛为单一路径（克隆到项目根目录），删除路径 A/B/C 三分法；init-harness.py 降为例外场景工具 | 维护者 |
 | v1.17 | 09-14 | 去除模板个人数据（责任人/变更条目通用化）；docs/harness 仅留通用速览，其余移出主干 | 维护者 |
@@ -155,4 +156,4 @@ Harness 版本：v1.19
 ---
 
 > _本文件是 Harness L2 State 层的物理实现，配合 AGENTS.md 使用。_
-> _版本：v1.19（2026-09-14）· ai-harness-kit_
+> _版本：v1.20（2026-09-14）· ai-harness-kit_
