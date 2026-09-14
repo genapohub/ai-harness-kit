@@ -38,7 +38,7 @@ git clone git@github.com:genapohub/ai-harness-kit.git your-project
 To pin a specific version instead of tracking the latest (see §9 for the version list):
 
 ```bash
-git clone -b harness-v1.18 https://github.com/genapohub/ai-harness-kit.git your-project
+git clone -b harness-v1.19 https://github.com/genapohub/ai-harness-kit.git your-project
 ```
 
 ### Step 1 after cloning: pull the role skills
@@ -61,22 +61,23 @@ Edit `AGENTS.md` / `project-tracker.md` / `.ai/SKILLS.md` and you are ready to w
 
 ### Exception: the project already exists
 
-Do **not** clone this repo inside a project that already has its own `.git` (it would disrupt the existing history). Inject the governance assets into the existing project root with the script instead:
+Do **not** clone this repo inside a project that already has its own `.git` (it would disrupt the existing history). Copy these assets into the existing project root:
 
-```bash
-# Lite (recommended): governance trio + evals only.
-# No 14-repo clone, no forced variable filling.
-python3 scripts/init-harness.py --lite --name "your-project" /path/to/your-project
-python3 scripts/init-harness.py --lite --name "your-project" --with-gate /path/to/your-project
-
-# Full: governance shell + multi-tool adapters + maintenance scripts
-python3 scripts/init-harness.py --full /path/to/your-project
+```text
+AGENTS.md
+project-tracker.md
+SECURITY.md
+.ai/
+.claude/
+.cursor/
+.github/
+.kiro/
+evals/
+scripts/       # optional: clone-skills.py and other maintenance scripts
+docs/          # optional: Harness methodology primer
 ```
 
-- Existing files are skipped by default; add `--force` to overwrite; add `--dry-run` to preview.
-- `--with-gate` additionally writes `.github/workflows/evals-gate.yml` (observation mode via `continue-on-error`; remove that line to make it a hard gate).
-- Prefer not to run a script? Copy the assets listed in §3 one by one, then edit the three entry files above.
-- Note: the script does **not** clone the 14 role-skill repos. Run `python3 scripts/clone-skills.py` when needed.
+Then edit the three entry files above and you are ready to work. To pull the role skills later, run `python3 scripts/clone-skills.py` inside that project.
 
 ## 3. Project structure
 
@@ -215,11 +216,13 @@ cp scripts/templates/evals-gate.yml .github/workflows/evals-gate.yml
 
 It runs `python3 evals/runner.py . --since HEAD~1` on PRs or pushes to `main`. Default is `continue-on-error: true`; once false positives are handled, delete that line to make it a hard gate.
 
-> For an existing project (the "exception" path), `init-harness.py --with-gate` writes the same file for you.
-
 ## 9. Versions
 
-Current: `harness-v1.18`
+Current: `harness-v1.19`
+
+v1.19:
+1. **Removed the install script** `scripts/init-harness.py`: the kit no longer ships any shell/inject script; the single supported path is cloning it as your project root.
+2. The "exception" section for existing projects now lists assets to copy manually; the PR gate is enabled by copying `scripts/templates/evals-gate.yml`.
 
 v1.18:
 1. External usage collapsed to a single path: **clone this repo as your project root**. The former Path A / B / C split is removed; `Use this template` is kept as an equivalent shortcut.

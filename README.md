@@ -38,7 +38,7 @@ git clone git@github.com:genapohub/ai-harness-kit.git your-project
 想固定版本而不是跟随最新改动（版本列表见 §九）：
 
 ```bash
-git clone -b harness-v1.18 https://github.com/genapohub/ai-harness-kit.git your-project
+git clone -b harness-v1.19 https://github.com/genapohub/ai-harness-kit.git your-project
 ```
 
 ### 克隆后第一步：拉取角色技能
@@ -61,21 +61,23 @@ python3 scripts/clone-skills.py --protocol ssh
 
 ### 例外：项目已存在
 
-已经有自己的 `.git` 的存量项目，不要直接把本仓库 clone 进去（会打乱原有历史）。改用脚本把治理资产注入现有项目根目录：
+已经有自己的 `.git` 的存量项目，不要直接把本仓库 clone 进去（会打乱原有历史）。把下面这些资产复制到现有项目根目录：
 
-```bash
-# 轻量（推荐）：只铺治理三件套 + evals，不克隆 14 仓、不强制填变量
-python3 scripts/init-harness.py --lite --name "你的项目名" /path/to/your-project
-python3 scripts/init-harness.py --lite --name "你的项目名" --with-gate /path/to/your-project
-
-# 完整：额外带上多端适配文件与维护脚本
-python3 scripts/init-harness.py --full /path/to/your-project
+```text
+AGENTS.md
+project-tracker.md
+SECURITY.md
+.ai/
+.claude/
+.cursor/
+.github/
+.kiro/
+evals/
+scripts/       # 可选：clone-skills.py 等维护脚本
+docs/          # 可选：Harness 方法论速览，不需要可略过
 ```
 
-- 已存在的文件默认跳过不覆盖；加 `--force` 强制覆盖；加 `--dry-run` 先预览会动什么。
-- `--with-gate` 额外写入 `.github/workflows/evals-gate.yml`（观察期 `continue-on-error`，稳定后删该行变硬门禁）。
-- 不想跑脚本，也可以按 §三 项目结构把资产逐个复制过去，再改上面三个入口文件。
-- 脚本**不会**自动克隆 14 个角色技能仓库，需要时单独跑 `python3 scripts/clone-skills.py`。
+复制后改上面三个入口文件即可开工。以后要拉取角色技能，在这个项目里运行 `python3 scripts/clone-skills.py`。
 
 ## 三、项目结构
 
@@ -218,8 +220,6 @@ cp scripts/templates/evals-gate.yml .github/workflows/evals-gate.yml
 
 它在 PR 或 push 到 `main` 时自动执行 `python3 evals/runner.py . --since HEAD~1`。默认 `continue-on-error: true`（只收集基线、不挡合并）；观察几轮、确认误报都已豁免后，删掉那一行即变硬门禁。
 
-> 存量项目走「例外」路径时，用 `init-harness.py --with-gate` 可以直接写入同一个文件。
-
 技能仓库一致性检查：
 
 ```bash
@@ -228,7 +228,12 @@ python3 scripts/check-skill-repos.py
 
 ## 九、版本
 
-当前版本：`harness-v1.18`
+当前版本：`harness-v1.19`
+
+v1.19 变更：
+
+1. **移除装机脚本** `scripts/init-harness.py`：kit 不再携带任何「铺壳 / 注入」脚本，对外统一为克隆到项目根目录。
+2. §二「例外：项目已存在」改为手动复制资产清单；PR 门禁改为从 `scripts/templates/evals-gate.yml` 复制到项目。
 
 v1.18 变更：
 

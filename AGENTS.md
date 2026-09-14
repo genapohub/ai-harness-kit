@@ -291,7 +291,7 @@ Code Review 沟通：
 
 ## 附录 A：模板使用指南
 
-1. **克隆本仓库到项目根目录**，本文件即为其中的 `AGENTS.md`（存量项目已存在时改用 `scripts/init-harness.py` 注入）
+1. **克隆本仓库到项目根目录**，本文件即为其中的 `AGENTS.md`
 2. **第一部分（项目身份）必须填**，否则 AI 没法工作
 3. **第二部分（角色定位）按项目风险等级选**，默认"对话协作"
 4. **第三~六部分按需微调**，但红线不要轻易删
@@ -358,6 +358,11 @@ git push origin harness-v1.1
 每次打 tag 必须同步更新本节：
 
 ```markdown
+## harness-v1.19（2026-09-14）
+- 移除装机脚本 `scripts/init-harness.py`：kit 不再携带任何「铺壳 / 注入」脚本，对外统一为克隆到项目根目录
+- §二「例外：项目已存在」改为手动复制资产清单；PR 门禁改为从 `scripts/templates/evals-gate.yml` 复制
+- 中英文 README、`docs/harness/README.md` 中相关引用同步清理
+
 ## harness-v1.18（2026-09-14）
 - 对外使用方式收敛为单一路径：统一「直接克隆到项目根目录」，删除原路径 A / B / C 三分法（`Use this template` 作为等价快捷方式保留说明）
 - `init-harness.py` 从对外主路径撤下，降为「项目已存在」这一例外场景的注入工具，不再作为装机步骤出现
@@ -479,4 +484,4 @@ git push origin harness-v1.0.1-revert
 ---
 
 > _维护原则：先骨架再追加细节。本模板先用默认值跑 2 周，再按实际踩坑迭代。_
-> _版本：v1.18（2026-09-14）· ai-harness-kit_
+> _版本：v1.19（2026-09-14）· ai-harness-kit_
