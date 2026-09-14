@@ -17,7 +17,7 @@
 关联 AGENTS.md：AGENTS.md
 关联仓库：{{REPOSITORY_URL}}
 当前分支：{{MAIN_BRANCH}}
-Harness 版本：v1.13
+Harness 版本：v1.16
 ```
 
 ---
@@ -127,6 +127,9 @@ Harness 版本：v1.13
 
 | 版本 | 日期 | 主要变更 | 责任人 |
 |---|---|---|---|
+| v1.16 | 09-14 | 对外整洁化：维护者实战记录移出主干；新增英文 README；README 清单/结构一致性修复；补版本固定说明 | 哥拿坡 |
+| v1.15 | 09-14 | 新增 init-harness.py（lite/full 双形态）与 evals-gate PR 门禁模板，替代 install.sh | 哥拿坡 |
+| v1.14 | 09-14 | evals/runner.py 升级 v0.4，补全 regression-cases.json 全部 14 个 case（默认 4 个→14 个） | 哥拿坡 |
 | v1.13 | 09-14 | 14 个技能默认 HTTPS 克隆，维护者可用 SSH 模式克隆后推送 | 哥拿坡 |
 | v1.12 | 09-14 | 主仓库过滤 skills 内容；新增技能克隆/推送脚本与动态变量字段 | 哥拿坡 |
 | v1.11 | 09-14 | 技能维护口径修正：kit 内 skills 为维护入口，14 个同名 GitHub 技能仓库保持一致 | 哥拿坡 |
@@ -149,4 +152,4 @@ Harness 版本：v1.13
 ---
 
 > _本文件是 Harness L2 State 层的物理实现，配合 AGENTS.md 使用。_
-> _版本：v1.13（2026-09-14）· ai-harness-kit_
+> _版本：v1.16（2026-09-14）· ai-harness-kit_

@@ -8,6 +8,8 @@ __pycache__/
 evals/reports/
 skills/*
 !skills/.gitkeep
+# 维护者自身项目实战记录，不随模板分发（本地保留）
+docs/harness/05-实战/
 node_modules/
 dist/
 build/

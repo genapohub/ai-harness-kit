@@ -313,7 +313,7 @@ Code Review 沟通：
 ├── .ai/SKILLS.md = 技能索引与克隆提示
 ├── evals/regression-cases.json = AI 产出物回归测试基线
 ├── .claude / .cursor / .github / .kiro = 多 AI 工具适配
-└── docs/harness/ = Harness 调研、实战与工具链历史沉淀
+└── docs/harness/ = Harness 调研与工具链方法论参考（可选，外部项目可删）
 ```
 
 本文件定**原则**，其他文件定**执行**。
@@ -358,6 +358,12 @@ git push origin harness-v1.1
 每次打 tag 必须同步更新本节：
 
 ```markdown
+## harness-v1.16（2026-09-14）
+- 对外发布整洁化：维护者自身项目实战记录（`docs/harness/05-实战/`）移出主干（`.gitignore` 忽略，本地保留），不再随模板分发
+- 新增 `README.en.md` 英文版，README 顶部互相链接
+- 修复 README「路径 C 复制清单」与「项目结构」不一致（清单补 `docs/`，标注可选）
+- 新增版本固定说明（`git clone -b harness-vX.Y`）；`docs/harness/` 语义由「历史沉淀」改为「方法论参考（可选）」
+
 ## harness-v1.15（2026-09-14）
 - 新增 `scripts/init-harness.py`：把治理壳应用到目标项目，支持 `--lite`（只铺治理三件套 + evals，不克隆 14 仓、不强制填变量）与 `--full`（完整资产集）双形态，替代被移除的 install.sh，解决「kit 不够灵活」的痛点
 - 新增 `scripts/templates/evals-gate.yml`：可一键生成的 GitHub Actions PR 门禁，`--with-gate` 写入目标仓库 `.github/workflows/evals-gate.yml`，观察期 `continue-on-error`、稳定后删行变硬
@@ -462,4 +468,4 @@ git push origin harness-v1.0.1-revert
 ---
 
 > _维护原则：先骨架再追加细节。本模板先用默认值跑 2 周，再按实际踩坑迭代。_
-> _版本：v1.15（2026-09-14）· ai-harness-kit_
+> _版本：v1.16（2026-09-14）· ai-harness-kit_

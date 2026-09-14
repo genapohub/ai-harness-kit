@@ -2,6 +2,8 @@
 
 > 后续主线维护仓库：`ai-harness-kit`。
 > 目标是一件事：把 AI 编程治理层直接放进项目根目录，让 Claude Code / Cursor / GitHub Copilot / Kiro / Codex 在同一套规则下协作。
+>
+> English version → [README.en.md](README.en.md)
 
 ## 一、它解决什么问题
 
@@ -81,9 +83,16 @@ SECURITY.md
 .kiro/
 evals/
 scripts/
+docs/          # 可选：Harness 方法论参考（01-调研 / 06-工具链），不需要可略过
 ```
 
 复制后先改 3 个入口文件：`AGENTS.md`、`project-tracker.md`、`.ai/SKILLS.md`。
+
+> 想固定版本而不是跟随最新改动，克隆时指定 tag（版本列表见 §九）：
+>
+> ```bash
+> git clone -b harness-v1.16 https://github.com/genapohub/ai-harness-kit.git your-project
+> ```
 
 ### 路径 C（脚本版）：用 init-harness.py 一键铺壳
 
@@ -121,8 +130,10 @@ your-project/
 ├── skills/                    # 初始为空，按需克隆 14 个独立角色技能仓库
 ├── evals/                     # AI 产出质量回归检查
 ├── scripts/                   # 维护脚本，日常使用无需先执行
-└── docs/harness/              # 05 沉淀 + ai-harness-kit 主线迭代记录
+└── docs/harness/              # Harness 方法论参考（01-调研 / 06-工具链），外部项目可删
 ```
+
+> `docs/` 只是方法论参考，**不是运行必需的**。只要不需要，直接用 `init-harness.py --lite` 铺壳时就不会带上它。
 
 ## 四、开工前只需要改三处
 
@@ -144,7 +155,7 @@ your-project/
 | PR 模板 | `.github/pull_request_template.md` |
 | Kiro 适配 | `.kiro/steering/harness.md` |
 | 质量回归检查 | `evals/runner.py` |
-| 历史沉淀 | `docs/harness/` |
+| 方法论参考（可选） | `docs/harness/` |
 
 使用建议：
 
@@ -250,7 +261,14 @@ python3 scripts/check-skill-repos.py
 
 ## 九、版本
 
-当前版本：`harness-v1.15`
+当前版本：`harness-v1.16`
+
+v1.16 变更：
+
+1. 对外发布整洁化：维护者自身项目实战记录（`docs/harness/05-实战/`）移出主干，本地保留、不再随模板分发。
+2. 新增 `README.en.md` 英文版，降低非中文用户上手门槛。
+3. 修复 README「路径 C 复制清单」与「项目结构」不一致：清单现列出 `docs/`，并标注为可选。
+4. 新增版本固定说明：克隆时可用 `git clone -b harness-vX.Y` 锁定版本（此前默认只能跟随最新）。
 
 v1.15 变更：
 
