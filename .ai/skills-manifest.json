@@ -1,6 +1,6 @@
 {
   "owner": "genapohub",
-  "default_protocol": "ssh",
+  "default_protocol": "https",
   "skills": [
     {
       "name": "backend-dev-guide",

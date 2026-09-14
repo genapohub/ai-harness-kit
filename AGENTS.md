@@ -358,6 +358,10 @@ git push origin harness-v1.1
 每次打 tag 必须同步更新本节：
 
 ```markdown
+## harness-v1.13（2026-09-14）
+- 14 个角色技能默认使用公开 HTTPS 克隆，降低外部用户首次使用门槛
+- 维护者需要推送技能仓库时，可通过 `python3 scripts/clone-skills.py --protocol ssh` 使用 SSH remote
+
 ## harness-v1.12（2026-09-14）
 - `ai-harness-kit` 主仓库过滤 `skills/` 内容，只保留技能清单和空目录占位
 - 初始克隆后通过 `python3 scripts/clone-skills.py` 拉取 14 个独立技能仓库
@@ -446,4 +450,4 @@ git push origin harness-v1.0.1-revert
 ---
 
 > _维护原则：先骨架再追加细节。本模板先用默认值跑 2 周，再按实际踩坑迭代。_
-> _版本：v1.12（2026-09-14）· ai-harness-kit_
+> _版本：v1.13（2026-09-14）· ai-harness-kit_

@@ -30,6 +30,12 @@
 python3 scripts/clone-skills.py
 ```
 
+维护者如果需要把技能仓库克隆成 SSH remote，方便后续推送，可以运行：
+
+```bash
+python3 scripts/clone-skills.py --protocol ssh
+```
+
 6. 改完下面 3 个文件就可以开工：
    - `AGENTS.md`：项目目标、目标用户、技术栈、AI 角色、红线
    - `project-tracker.md`：当前阶段、WIP、风险、决策
@@ -166,6 +172,8 @@ python3 scripts/push-skills.py
 python3 scripts/push-skills.py --dry-run
 ```
 
+如果技能目录是用 HTTPS 克隆的，推送需要 GitHub 登录凭据；维护者更推荐用 `python3 scripts/clone-skills.py --protocol ssh` 克隆技能仓库。
+
 ## 七、动态变量
 
 模板里的项目字段统一使用 `{{VARIABLE_NAME}}` 占位。新项目从样例复制一份变量文件：
@@ -209,7 +217,12 @@ python3 scripts/check-skill-repos.py
 
 ## 九、版本
 
-当前版本：`harness-v1.12`
+当前版本：`harness-v1.13`
+
+v1.13 变更：
+
+1. 14 个角色技能默认使用公开 HTTPS 克隆，降低外部用户首次使用门槛。
+2. 维护者需要推送技能仓库时，可通过 `python3 scripts/clone-skills.py --protocol ssh` 使用 SSH remote。
 
 v1.12 变更：
 

@@ -7,7 +7,7 @@
 
 1. `ai-harness-kit` 主仓库推送时过滤 `skills/` 内容，只保留 `skills/.gitkeep` 占位。
 2. 14 个角色技能由 `.ai/skills-manifest.json` 管理。
-3. 初始克隆后运行 `python3 scripts/clone-skills.py` 拉取 14 个角色技能。
+3. 初始克隆后运行 `python3 scripts/clone-skills.py` 拉取 14 个角色技能，默认使用公开 HTTPS。
 4. 每个角色技能仍作为独立 GitHub 仓库维护和推送。
 5. 项目字段统一采用 `{{VARIABLE_NAME}}` 动态变量。
 
@@ -24,6 +24,12 @@ AI 进入项目后必须先读：
 
 ```bash
 python3 scripts/clone-skills.py
+```
+
+维护者需要推送技能仓库时，可用 SSH 克隆：
+
+```bash
+python3 scripts/clone-skills.py --protocol ssh
 ```
 
 ## 三、技能维护与推送
