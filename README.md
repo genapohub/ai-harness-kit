@@ -202,12 +202,16 @@ python3 scripts/apply-variables.py
 python3 evals/runner.py . --since HEAD~1
 ```
 
-检查范围包括：
+检查范围（runner v0.4，对应 regression-cases.json 全部 14 个 case）：
 
-1. Harness 治理三件套是否落位。
-2. 是否有明显调试残留。
-3. 是否有常见密钥泄露。
-4. 新增 commit message 是否符合约定。
+- **Harness 治理**：harness-001 治理三件套（AGENTS.md / project-tracker.md / SECURITY.md）是否落位
+- **代码质量**：code-001 命名规范（Python snake_case / 文件名无空格）· code-002 无遗留调试代码（console.log / debugger / print，deploy/scripts/test_/migrate_ 豁免）· code-003 测试覆盖率（结构代理：测试基础设施是否就位）
+- **规范遵守**：spec-001 不调用黑名单工具（rm -rf /、git push --force、擅改 CI workflow）· spec-002 PR 描述完整性（本地仅查 PR 模板，逐字段需 CI/forge）· spec-003 commit message 规范（conventional 前缀 + 首行 ≤72）
+- **文档质量**：doc-001 PRD 结构 · doc-002 API 文档结构 · doc-003 技术选型/设计文档决策可追溯
+- **AI 协作**：collab-001 跨角色上下文交接（project-tracker 含「AI 协作上下文」）· collab-002 角色冲突升级（含「决策日志」）
+- **安全合规**：security-001 无密钥泄露 · security-002 敏感数据脱敏（客户数据文件中无明文手机号/身份证号）
+
+> 提示：doc / spec-002 / code-003 为「结构/代理检查」，命中=待人工复核的基线项，不一定是硬伤；历史存量告警按 regression-cases.json 豁免策略处理，增量模式（`--since`）守护新增。
 
 技能仓库一致性检查：
 

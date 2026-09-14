@@ -358,6 +358,13 @@ git push origin harness-v1.1
 每次打 tag 必须同步更新本节：
 
 ```markdown
+## harness-v1.14（2026-09-14）
+- evals/runner.py 升级为 v0.4，补全此前缺失的 10 个 case，**实现 regression-cases.json 声明的全部 14 个 case（6 类）**——此前仅实现 4 个，名不副实（P0）
+- 新增 case：code-001 命名 / code-003 测试覆盖率（结构代理） / spec-001 黑名单工具 / spec-002 PR 模板 / doc-001 PRD / doc-002 API / doc-003 选型 / collab-001 交接 / collab-002 升级 / security-002 脱敏
+- doc-* 改用独立 markdown walker（覆盖真实项目「数字编号目录」如 01-产品文档）；collab-* 柔性定位 project-tracker.md（根目录 / 07-其它文档 / .skills-memory / .workbuddy/memory）
+- code-002 豁免改为路径感知（deploy/ scripts/ 任意层级、test_ / migrate_ 前缀文件），修复嵌套目录误报
+- 实测：kit 13/14、宠宝树 8/14、pet_xiaoman 9/14；pet_xiaoman 历史 6 条垃圾 commit（555 / 哈哈哈哈哈）被 spec-003 捕获
+
 ## harness-v1.13（2026-09-14）
 - 14 个角色技能默认使用公开 HTTPS 克隆，降低外部用户首次使用门槛
 - 维护者需要推送技能仓库时，可通过 `python3 scripts/clone-skills.py --protocol ssh` 使用 SSH remote
@@ -450,4 +457,4 @@ git push origin harness-v1.0.1-revert
 ---
 
 > _维护原则：先骨架再追加细节。本模板先用默认值跑 2 周，再按实际踩坑迭代。_
-> _版本：v1.13（2026-09-14）· ai-harness-kit_
+> _版本：v1.14（2026-09-14）· ai-harness-kit_
