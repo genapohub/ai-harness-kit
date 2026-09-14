@@ -358,6 +358,11 @@ git push origin harness-v1.1
 每次打 tag 必须同步更新本节：
 
 ```markdown
+## harness-v1.15（2026-09-14）
+- 新增 `scripts/init-harness.py`：把治理壳应用到目标项目，支持 `--lite`（只铺治理三件套 + evals，不克隆 14 仓、不强制填变量）与 `--full`（完整资产集）双形态，替代被移除的 install.sh，解决「kit 不够灵活」的痛点
+- 新增 `scripts/templates/evals-gate.yml`：可一键生成的 GitHub Actions PR 门禁，`--with-gate` 写入目标仓库 `.github/workflows/evals-gate.yml`，观察期 `continue-on-error`、稳定后删行变硬
+- lite 模式仅替换 `{{PROJECT_NAME}}`，其余 `{{...}}` 变量留待用户补，变量不全不报错
+
 ## harness-v1.14（2026-09-14）
 - evals/runner.py 升级为 v0.4，补全此前缺失的 10 个 case，**实现 regression-cases.json 声明的全部 14 个 case（6 类）**——此前仅实现 4 个，名不副实（P0）
 - 新增 case：code-001 命名 / code-003 测试覆盖率（结构代理） / spec-001 黑名单工具 / spec-002 PR 模板 / doc-001 PRD / doc-002 API / doc-003 选型 / collab-001 交接 / collab-002 升级 / security-002 脱敏
@@ -457,4 +462,4 @@ git push origin harness-v1.0.1-revert
 ---
 
 > _维护原则：先骨架再追加细节。本模板先用默认值跑 2 周，再按实际踩坑迭代。_
-> _版本：v1.14（2026-09-14）· ai-harness-kit_
+> _版本：v1.15（2026-09-14）· ai-harness-kit_

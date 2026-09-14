@@ -85,6 +85,25 @@ scripts/
 
 复制后先改 3 个入口文件：`AGENTS.md`、`project-tracker.md`、`.ai/SKILLS.md`。
 
+### 路径 C（脚本版）：用 init-harness.py 一键铺壳
+
+手动复制容易漏文件。用脚本替代上面的人工复制，并且支持「轻量模式」——这也是本 kit 最灵活的形态：
+
+```bash
+# 轻量（推荐大多数团队）：只铺治理三件套 + evals 审计，不克隆 14 仓、不强制填变量
+python3 scripts/init-harness.py --lite --name "你的项目名" /path/to/your-project
+python3 scripts/init-harness.py --lite --name "你的项目名" --with-gate /path/to/your-project
+
+# 完整：治理壳 + 多端适配 + 维护脚本（照搬上面「路径 C」的全部资产）
+python3 scripts/init-harness.py --full /path/to/your-project
+```
+
+- `--lite`：只复制 `AGENTS.md` / `project-tracker.md` / `SECURITY.md` / `evals/`，并仅替换 `{{PROJECT_NAME}}`；其余 `{{...}}` 变量留给你按需补，不会因变量没填而报错。
+- `--full`：复制完整资产集（`.ai` `.claude` `.cursor` `.github` `.kiro` `scripts` + 三件套），若目标目录已存在 `.ai/harness.variables.json` 则自动渲染全部变量。
+- `--with-gate`：额外写入 `.github/workflows/evals-gate.yml`，PR/推送时自动跑 evals（观察期 `continue-on-error`，稳定后删该行变硬门禁）。
+- 已存在的文件默认跳过不覆盖；要强制覆盖加 `--force`；先看会动什么加 `--dry-run`。
+- 注意：脚本**不会**自动克隆 14 个角色技能仓库（full 也只铺占位），需要时单独跑 `python3 scripts/clone-skills.py`。
+
 ## 三、项目结构
 
 ```text
@@ -213,6 +232,16 @@ python3 evals/runner.py . --since HEAD~1
 
 > 提示：doc / spec-002 / code-003 为「结构/代理检查」，命中=待人工复核的基线项，不一定是硬伤；历史存量告警按 regression-cases.json 豁免策略处理，增量模式（`--since`）守护新增。
 
+### PR 门禁（evals-gate）
+
+想要把质量检查变成合并前的硬约束，用 `--with-gate` 生成 GitHub Actions 工作流：
+
+```bash
+python3 scripts/init-harness.py --lite --name "你的项目名" --with-gate /path/to/your-project
+```
+
+它会在目标仓库写入 `.github/workflows/evals-gate.yml`，PR 或 push 到 `main` 时自动执行 `python3 evals/runner.py . --since HEAD~1`。默认 `continue-on-error: true`（只收集基线、不挡合并）；观察几轮、确认误报都已豁免后，删掉那一行即变硬门禁。
+
 技能仓库一致性检查：
 
 ```bash
@@ -221,7 +250,17 @@ python3 scripts/check-skill-repos.py
 
 ## 九、版本
 
-当前版本：`harness-v1.13`
+当前版本：`harness-v1.15`
+
+v1.15 变更：
+
+1. 新增 `scripts/init-harness.py`：把治理壳应用到目标项目，支持 `--lite`（只铺治理三件套 + evals，不克隆 14 仓、不强制填变量）与 `--full`（完整资产集）双形态。
+2. 新增 `scripts/templates/evals-gate.yml`：可一键生成的 GitHub Actions PR 门禁，PR/push 时跑 evals runner，`--with-gate` 写入目标仓库。
+3. 轻量模式是 kit 最灵活的入口，替代被移除的 install.sh：lite-first，多数团队无需克隆 14 仓即可上手治理。
+
+v1.14 变更：
+
+1. `evals/runner.py` 升级 v0.4，补全 14 个 case 实现（此前仅 4 个），详见 AGENTS.md 附录 C。
 
 v1.13 变更：
 
