@@ -17,7 +17,7 @@
 关联 AGENTS.md：AGENTS.md
 关联仓库：{{REPOSITORY_URL}}
 当前分支：{{MAIN_BRANCH}}
-Harness 版本：v1.17
+Harness 版本：v1.18
 ```
 
 ---
@@ -127,6 +127,7 @@ Harness 版本：v1.17
 
 | 版本 | 日期 | 主要变更 | 责任人 |
 |---|---|---|---|
+| v1.18 | 09-14 | 对外使用收敛为单一路径（克隆到项目根目录），删除路径 A/B/C 三分法；init-harness.py 降为例外场景工具 | 维护者 |
 | v1.17 | 09-14 | 去除模板个人数据（责任人/变更条目通用化）；docs/harness 仅留通用速览，其余移出主干 | 维护者 |
 | v1.16 | 09-14 | 对外整洁化：维护者实战记录移出主干；新增英文 README；README 清单/结构一致性修复；补版本固定说明 | 维护者 |
 | v1.15 | 09-14 | 新增 init-harness.py（lite/full 双形态）与 evals-gate PR 门禁模板，替代 install.sh | 维护者 |
@@ -153,4 +154,4 @@ Harness 版本：v1.17
 ---
 
 > _本文件是 Harness L2 State 层的物理实现，配合 AGENTS.md 使用。_
-> _版本：v1.17（2026-09-14）· ai-harness-kit_
+> _版本：v1.18（2026-09-14）· ai-harness-kit_

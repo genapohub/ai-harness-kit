@@ -16,34 +16,9 @@
 3. `.ai/skills-manifest.json` + `.ai/SKILLS.md`：项目可用角色技能清单。
 4. `evals/` + 多工具适配文件：用回归检查和工具规则守住产出质量。
 
-## 二、对外用户怎么用
+## 二、怎么用：克隆到你的项目根目录
 
-### 路径 A：新项目，推荐用 GitHub Template
-
-适合：从零创建一个新业务项目。
-
-1. 打开仓库：[https://github.com/genapohub/ai-harness-kit](https://github.com/genapohub/ai-harness-kit)
-2. 点击 `Use this template`
-3. 创建你的业务项目仓库
-4. 克隆新业务仓库到本地
-5. 按提示拉取 14 个角色技能：
-
-```bash
-python3 scripts/clone-skills.py
-```
-
-维护者如果需要把技能仓库克隆成 SSH remote，方便后续推送，可以运行：
-
-```bash
-python3 scripts/clone-skills.py --protocol ssh
-```
-
-6. 改完下面 3 个文件就可以开工：
-   - `AGENTS.md`：项目目标、目标用户、技术栈、AI 角色、红线
-   - `project-tracker.md`：当前阶段、WIP、风险、决策
-   - `.ai/SKILLS.md`：本项目启用哪些角色技能
-
-### 路径 B：新项目，直接克隆
+对外只有一条使用方式——**把本仓库克隆成你的项目根目录**。克隆下来即为可用形态，不需要执行任何装机脚本。
 
 ```bash
 git clone https://github.com/genapohub/ai-harness-kit.git your-project
@@ -52,66 +27,55 @@ git remote rename origin ai-harness-kit-template
 git remote add origin git@github.com:your-org/your-project.git
 ```
 
-如果你已经配置 SSH，也可以：
+也可以从 GitHub 上点 `Use this template` 创建自己的项目仓库，效果等同（本质仍是克隆一份副本）。
+
+已经配置 SSH 的话：
 
 ```bash
 git clone git@github.com:genapohub/ai-harness-kit.git your-project
 ```
 
-克隆完成后，`your-project/` 就已经是带 AI 编程治理能力的项目根目录，不需要额外执行装机脚本。
+想固定版本而不是跟随最新改动（版本列表见 §九）：
 
-初始克隆不包含 `skills/` 下的角色技能内容。第一次任务对话或开工前运行：
+```bash
+git clone -b harness-v1.18 https://github.com/genapohub/ai-harness-kit.git your-project
+```
+
+### 克隆后第一步：拉取角色技能
+
+初始克隆不包含 `skills/` 下的角色技能内容（主仓库只保留 `.gitkeep` 占位）。首次任务对话或开工前运行一次：
 
 ```bash
 python3 scripts/clone-skills.py
 ```
 
-### 路径 C：已有项目，复制治理资产
-
-适合：项目已经存在，并且已经有自己的 `.git`。
-
-不要把本仓库直接 clone 到已有项目里面。把下面这些资产复制到已有项目根目录：
-
-```text
-AGENTS.md
-project-tracker.md
-SECURITY.md
-.ai/
-.claude/
-.cursor/
-.github/
-.kiro/
-evals/
-scripts/
-docs/          # 可选：Harness 方法论速览，不需要可略过
-```
-
-复制后先改 3 个入口文件：`AGENTS.md`、`project-tracker.md`、`.ai/SKILLS.md`。
-
-> 想固定版本而不是跟随最新改动，克隆时指定 tag（版本列表见 §九）：
->
-> ```bash
-> git clone -b harness-v1.16 https://github.com/genapohub/ai-harness-kit.git your-project
-> ```
-
-### 路径 C（脚本版）：用 init-harness.py 一键铺壳
-
-手动复制容易漏文件。用脚本替代上面的人工复制，并且支持「轻量模式」——这也是本 kit 最灵活的形态：
+维护者若要把技能仓库克隆成 SSH remote 方便后续推送：
 
 ```bash
-# 轻量（推荐大多数团队）：只铺治理三件套 + evals 审计，不克隆 14 仓、不强制填变量
+python3 scripts/clone-skills.py --protocol ssh
+```
+
+### 克隆后第二步：改三个入口文件
+
+改 `AGENTS.md` / `project-tracker.md` / `.ai/SKILLS.md` 三处即可开工，每个文件写什么见 §四。
+
+### 例外：项目已存在
+
+已经有自己的 `.git` 的存量项目，不要直接把本仓库 clone 进去（会打乱原有历史）。改用脚本把治理资产注入现有项目根目录：
+
+```bash
+# 轻量（推荐）：只铺治理三件套 + evals，不克隆 14 仓、不强制填变量
 python3 scripts/init-harness.py --lite --name "你的项目名" /path/to/your-project
 python3 scripts/init-harness.py --lite --name "你的项目名" --with-gate /path/to/your-project
 
-# 完整：治理壳 + 多端适配 + 维护脚本（照搬上面「路径 C」的全部资产）
+# 完整：额外带上多端适配文件与维护脚本
 python3 scripts/init-harness.py --full /path/to/your-project
 ```
 
-- `--lite`：只复制 `AGENTS.md` / `project-tracker.md` / `SECURITY.md` / `evals/`，并仅替换 `{{PROJECT_NAME}}`；其余 `{{...}}` 变量留给你按需补，不会因变量没填而报错。
-- `--full`：复制完整资产集（`.ai` `.claude` `.cursor` `.github` `.kiro` `scripts` + 三件套），若目标目录已存在 `.ai/harness.variables.json` 则自动渲染全部变量。
-- `--with-gate`：额外写入 `.github/workflows/evals-gate.yml`，PR/推送时自动跑 evals（观察期 `continue-on-error`，稳定后删该行变硬门禁）。
-- 已存在的文件默认跳过不覆盖；要强制覆盖加 `--force`；先看会动什么加 `--dry-run`。
-- 注意：脚本**不会**自动克隆 14 个角色技能仓库（full 也只铺占位），需要时单独跑 `python3 scripts/clone-skills.py`。
+- 已存在的文件默认跳过不覆盖；加 `--force` 强制覆盖；加 `--dry-run` 先预览会动什么。
+- `--with-gate` 额外写入 `.github/workflows/evals-gate.yml`（观察期 `continue-on-error`，稳定后删该行变硬门禁）。
+- 不想跑脚本，也可以按 §三 项目结构把资产逐个复制过去，再改上面三个入口文件。
+- 脚本**不会**自动克隆 14 个角色技能仓库，需要时单独跑 `python3 scripts/clone-skills.py`。
 
 ## 三、项目结构
 
@@ -133,7 +97,7 @@ your-project/
 └── docs/harness/              # Harness 方法论速览（可选），外部项目可删
 ```
 
-> `docs/` 只是方法论参考，**不是运行必需的**。只要不需要，直接用 `init-harness.py --lite` 铺壳时就不会带上它。
+> `docs/` 只是方法论参考，**不是运行必需的**，外部项目可以直接删掉。
 
 ## 四、开工前只需要改三处
 
@@ -245,13 +209,16 @@ python3 evals/runner.py . --since HEAD~1
 
 ### PR 门禁（evals-gate）
 
-想要把质量检查变成合并前的硬约束，用 `--with-gate` 生成 GitHub Actions 工作流：
+想要把质量检查变成合并前的硬约束，把仓库里的工作流模板复制到项目：
 
 ```bash
-python3 scripts/init-harness.py --lite --name "你的项目名" --with-gate /path/to/your-project
+mkdir -p .github/workflows
+cp scripts/templates/evals-gate.yml .github/workflows/evals-gate.yml
 ```
 
-它会在目标仓库写入 `.github/workflows/evals-gate.yml`，PR 或 push 到 `main` 时自动执行 `python3 evals/runner.py . --since HEAD~1`。默认 `continue-on-error: true`（只收集基线、不挡合并）；观察几轮、确认误报都已豁免后，删掉那一行即变硬门禁。
+它在 PR 或 push 到 `main` 时自动执行 `python3 evals/runner.py . --since HEAD~1`。默认 `continue-on-error: true`（只收集基线、不挡合并）；观察几轮、确认误报都已豁免后，删掉那一行即变硬门禁。
+
+> 存量项目走「例外」路径时，用 `init-harness.py --with-gate` 可以直接写入同一个文件。
 
 技能仓库一致性检查：
 
@@ -261,7 +228,13 @@ python3 scripts/check-skill-repos.py
 
 ## 九、版本
 
-当前版本：`harness-v1.17`
+当前版本：`harness-v1.18`
+
+v1.18 变更：
+
+1. **对外使用方式收敛为单一路径**：统一为「直接克隆到项目根目录」，删除原路径 A / B / C 三分法；`Use this template` 作为等价快捷方式保留一句说明。
+2. `init-harness.py` 从对外主路径撤下，降为「项目已存在」这一例外场景的治理资产注入工具，不再作为装机步骤出现。
+3. 版本固定示例与 §二 的克隆命令同步更新。
 
 v1.17 变更：
 

@@ -16,34 +16,9 @@ It drops four kinds of assets into your project at once:
 3. `.ai/skills-manifest.json` + `.ai/SKILLS.md` — the role-skill catalog available to the project.
 4. `evals/` + multi-tool adapter files — regression checks and tool rules that guard output quality.
 
-## 2. How external users get started
+## 2. How to use: clone it as your project root
 
-### Path A: New project — use the GitHub Template (recommended)
-
-Best for: starting a brand-new business project.
-
-1. Open the repo: [https://github.com/genapohub/ai-harness-kit](https://github.com/genapohub/ai-harness-kit)
-2. Click `Use this template`
-3. Create your own project repository
-4. Clone it locally
-5. Pull the 14 role skills as prompted:
-
-```bash
-python3 scripts/clone-skills.py
-```
-
-Maintainers who want SSH remotes for pushing can run:
-
-```bash
-python3 scripts/clone-skills.py --protocol ssh
-```
-
-6. Edit three files and you're ready to work:
-   - `AGENTS.md` — project goal, target users, tech stack, AI roles, red lines
-   - `project-tracker.md` — current phase, WIP, risks, decisions
-   - `.ai/SKILLS.md` — which role skills this project enables
-
-### Path B: New project — clone directly
+There is only one supported way — **clone this repository as your project root**. That is all it takes; no install script is required.
 
 ```bash
 git clone https://github.com/genapohub/ai-harness-kit.git your-project
@@ -52,54 +27,44 @@ git remote rename origin ai-harness-kit-template
 git remote add origin git@github.com:your-org/your-project.git
 ```
 
+You can also click `Use this template` on GitHub to create your own project repository — same result, it is still a clone of a copy.
+
 If you already have SSH configured:
 
 ```bash
 git clone git@github.com:genapohub/ai-harness-kit.git your-project
 ```
 
-To pin a specific version instead of tracking the latest:
+To pin a specific version instead of tracking the latest (see §9 for the version list):
 
 ```bash
-git clone -b harness-v1.16 https://github.com/genapohub/ai-harness-kit.git your-project
+git clone -b harness-v1.18 https://github.com/genapohub/ai-harness-kit.git your-project
 ```
 
-After cloning, `your-project/` is already a project root with AI coding governance — no extra install step required.
+### Step 1 after cloning: pull the role skills
 
-The initial clone does **not** include the role skills under `skills/`. Run this before your first task:
+The initial clone does **not** include the role skills under `skills/` (the repo only keeps a `.gitkeep` placeholder). Run this once before your first task:
 
 ```bash
 python3 scripts/clone-skills.py
 ```
 
-### Path C: Existing project — copy the governance assets
-
-Best for: a project that already exists and already has its own `.git`.
-
-Do **not** clone this repo inside an existing project. Copy these assets into the existing project root:
-
-```text
-AGENTS.md
-project-tracker.md
-SECURITY.md
-.ai/
-.claude/
-.cursor/
-.github/
-.kiro/
-evals/
-scripts/
-docs/          # optional: Harness methodology primer
-```
-
-Then edit the three entry files: `AGENTS.md`, `project-tracker.md`, `.ai/SKILLS.md`.
-
-### Path C (script): one-command shell with `init-harness.py`
-
-Manual copying is easy to get wrong. Use the script instead — it also supports a "lite" mode, the most flexible form of this kit:
+Maintainers who want SSH remotes for pushing:
 
 ```bash
-# Lite (recommended for most teams): governance trio + evals only.
+python3 scripts/clone-skills.py --protocol ssh
+```
+
+### Step 2 after cloning: edit three entry files
+
+Edit `AGENTS.md` / `project-tracker.md` / `.ai/SKILLS.md` and you are ready to work — see §4 for what goes into each.
+
+### Exception: the project already exists
+
+Do **not** clone this repo inside a project that already has its own `.git` (it would disrupt the existing history). Inject the governance assets into the existing project root with the script instead:
+
+```bash
+# Lite (recommended): governance trio + evals only.
 # No 14-repo clone, no forced variable filling.
 python3 scripts/init-harness.py --lite --name "your-project" /path/to/your-project
 python3 scripts/init-harness.py --lite --name "your-project" --with-gate /path/to/your-project
@@ -108,10 +73,9 @@ python3 scripts/init-harness.py --lite --name "your-project" --with-gate /path/t
 python3 scripts/init-harness.py --full /path/to/your-project
 ```
 
-- `--lite`: copies only `AGENTS.md` / `project-tracker.md` / `SECURITY.md` / `evals/`, and replaces only `{{PROJECT_NAME}}`. Remaining `{{...}}` placeholders are left for you to fill; missing variables never raise an error.
-- `--full`: copies the full asset set (`.ai` `.claude` `.cursor` `.github` `.kiro` `scripts` + the trio). If `.ai/harness.variables.json` exists, all variables are rendered.
-- `--with-gate`: additionally writes `.github/workflows/evals-gate.yml` to run evals on PR/push (observation mode via `continue-on-error`; remove that line to make it a hard gate).
 - Existing files are skipped by default; add `--force` to overwrite; add `--dry-run` to preview.
+- `--with-gate` additionally writes `.github/workflows/evals-gate.yml` (observation mode via `continue-on-error`; remove that line to make it a hard gate).
+- Prefer not to run a script? Copy the assets listed in §3 one by one, then edit the three entry files above.
 - Note: the script does **not** clone the 14 role-skill repos. Run `python3 scripts/clone-skills.py` when needed.
 
 ## 3. Project structure
@@ -242,17 +206,29 @@ Coverage (runner v0.4, all 14 cases in `regression-cases.json`):
 
 ### PR gate (evals-gate)
 
-To turn quality checks into a merge constraint, generate a GitHub Actions workflow with `--with-gate`:
+To turn the quality checks into a merge constraint, copy the workflow template from the repo:
 
 ```bash
-python3 scripts/init-harness.py --lite --name "your-project" --with-gate /path/to/your-project
+mkdir -p .github/workflows
+cp scripts/templates/evals-gate.yml .github/workflows/evals-gate.yml
 ```
 
-It writes `.github/workflows/evals-gate.yml`, running `python3 evals/runner.py . --since HEAD~1` on PRs or pushes to `main`. Default is `continue-on-error: true`; once false positives are handled, delete that line to make it a hard gate.
+It runs `python3 evals/runner.py . --since HEAD~1` on PRs or pushes to `main`. Default is `continue-on-error: true`; once false positives are handled, delete that line to make it a hard gate.
+
+> For an existing project (the "exception" path), `init-harness.py --with-gate` writes the same file for you.
 
 ## 9. Versions
 
-Current: `harness-v1.16`
+Current: `harness-v1.18`
+
+v1.18:
+1. External usage collapsed to a single path: **clone this repo as your project root**. The former Path A / B / C split is removed; `Use this template` is kept as an equivalent shortcut.
+2. `init-harness.py` moved off the main path and reframed as the exception case for projects that already exist.
+3. Version-pinning example and the §2 clone commands updated together.
+
+v1.17:
+1. Personal data and fields removed from the template; it is now fully generic for external users.
+2. Only a generic methodology primer ships under `docs/harness/`; maintainer notes and scripts moved out of the tree.
 
 v1.16:
 1. External-release cleanup: maintainer's own project logs moved out of the shipped tree.
