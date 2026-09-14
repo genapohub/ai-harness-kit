@@ -313,7 +313,7 @@ Code Review 沟通：
 ├── .ai/SKILLS.md = 技能索引与克隆提示
 ├── evals/regression-cases.json = AI 产出物回归测试基线
 ├── .claude / .cursor / .github / .kiro = 多 AI 工具适配
-└── docs/harness/ = Harness 调研与工具链方法论参考（可选，外部项目可删）
+└── docs/harness/ = Harness 方法论速览（可选，外部项目可删）
 ```
 
 本文件定**原则**，其他文件定**执行**。
@@ -358,8 +358,13 @@ git push origin harness-v1.1
 每次打 tag 必须同步更新本节：
 
 ```markdown
+## harness-v1.17（2026-09-14）
+- 去除模板中的个人数据：责任人字段 / 变更条目中的个人名与项目名统一通用化，模板不含任何个人字段
+- `docs/harness/` 对外仅保留一份通用《方法论速览》（README.md）；调研笔记 / 工具脚本 / 实战记录移出主干（`.gitignore` 忽略，本地保留）
+- 中英文 README 的 `docs/` 描述同步更新
+
 ## harness-v1.16（2026-09-14）
-- 对外发布整洁化：维护者自身项目实战记录（`docs/harness/05-实战/`）移出主干（`.gitignore` 忽略，本地保留），不再随模板分发
+- 对外发布整洁化：维护者自身项目实战记录移出主干（`.gitignore` 忽略，本地保留），不再随模板分发
 - 新增 `README.en.md` 英文版，README 顶部互相链接
 - 修复 README「路径 C 复制清单」与「项目结构」不一致（清单补 `docs/`，标注可选）
 - 新增版本固定说明（`git clone -b harness-vX.Y`）；`docs/harness/` 语义由「历史沉淀」改为「方法论参考（可选）」
@@ -372,9 +377,9 @@ git push origin harness-v1.1
 ## harness-v1.14（2026-09-14）
 - evals/runner.py 升级为 v0.4，补全此前缺失的 10 个 case，**实现 regression-cases.json 声明的全部 14 个 case（6 类）**——此前仅实现 4 个，名不副实（P0）
 - 新增 case：code-001 命名 / code-003 测试覆盖率（结构代理） / spec-001 黑名单工具 / spec-002 PR 模板 / doc-001 PRD / doc-002 API / doc-003 选型 / collab-001 交接 / collab-002 升级 / security-002 脱敏
-- doc-* 改用独立 markdown walker（覆盖真实项目「数字编号目录」如 01-产品文档）；collab-* 柔性定位 project-tracker.md（根目录 / 07-其它文档 / .skills-memory / .workbuddy/memory）
+- doc-* 改用独立 markdown walker（覆盖真实项目「数字编号目录」）；collab-* 柔性定位 project-tracker.md（根目录 / docs/ / .ai/ 等常见位置）
 - code-002 豁免改为路径感知（deploy/ scripts/ 任意层级、test_ / migrate_ 前缀文件），修复嵌套目录误报
-- 实测：kit 13/14、宠宝树 8/14、pet_xiaoman 9/14；pet_xiaoman 历史 6 条垃圾 commit（555 / 哈哈哈哈哈）被 spec-003 捕获
+- 实测：kit 自身 13/14；在多个真实项目上回归，捕获历史提交信息不规范（spec-003 命中）
 
 ## harness-v1.13（2026-09-14）
 - 14 个角色技能默认使用公开 HTTPS 克隆，降低外部用户首次使用门槛
@@ -393,7 +398,7 @@ git push origin harness-v1.1
 - `.ai/SKILLS.md` 增加独立仓库链接列
 
 ## harness-v1.10（2026-09-13）
-- 技能主源收敛到 `ai-harness-kit/skills/`，不再依赖外部 `00-Skills汇总`
+- 技能主源收敛到 `ai-harness-kit/skills/`，不再依赖外部目录
 - `.ai/SKILLS.md` 按当前 14 个内置技能重建索引
 - `scripts/refresh-skills.sh` 改为从仓库自身 `skills/` 生成技能索引
 
@@ -413,12 +418,12 @@ git push origin harness-v1.1
 - README 去掉克隆后的自检命令，`scripts/` 仅作为维护工具保留
 
 ## harness-v1.6（2026-09-13）
-- 合并 05-Harness 母体沉淀到本仓库 `docs/harness/`
+- 合并早期 Harness 调研沉淀到本仓库 `docs/harness/`
 - 仓库过渡为 GitHub 直接克隆版
 - 仓库升级为 GitHub 直接克隆版：治理三件套、Skills、evals、适配文件均位于项目根目录
 
 ## harness-v1.5（2026-09-13）
-- install.sh 新增 `--with-local-skills`，可把本机 `00-Skills汇总` 中包含 SKILL.md 的角色技能安装到项目 `skills/`
+- install.sh 新增 `--with-local-skills`，可把本机技能目录中包含 SKILL.md 的角色技能安装到项目 `skills/`
 - install.sh 新增 `--with-adapters`，可选生成 Claude / Cursor / GitHub Copilot / Kiro 适配文件
 - regression-cases.json 新增 harness-001，runner.py 升级为 v0.3，检查项目根目录治理三件套是否落位
 
@@ -468,4 +473,4 @@ git push origin harness-v1.0.1-revert
 ---
 
 > _维护原则：先骨架再追加细节。本模板先用默认值跑 2 周，再按实际踩坑迭代。_
-> _版本：v1.16（2026-09-14）· ai-harness-kit_
+> _版本：v1.17（2026-09-14）· ai-harness-kit_

@@ -17,7 +17,7 @@
 关联 AGENTS.md：AGENTS.md
 关联仓库：{{REPOSITORY_URL}}
 当前分支：{{MAIN_BRANCH}}
-Harness 版本：v1.16
+Harness 版本：v1.17
 ```
 
 ---
@@ -127,16 +127,17 @@ Harness 版本：v1.16
 
 | 版本 | 日期 | 主要变更 | 责任人 |
 |---|---|---|---|
-| v1.16 | 09-14 | 对外整洁化：维护者实战记录移出主干；新增英文 README；README 清单/结构一致性修复；补版本固定说明 | 哥拿坡 |
-| v1.15 | 09-14 | 新增 init-harness.py（lite/full 双形态）与 evals-gate PR 门禁模板，替代 install.sh | 哥拿坡 |
-| v1.14 | 09-14 | evals/runner.py 升级 v0.4，补全 regression-cases.json 全部 14 个 case（默认 4 个→14 个） | 哥拿坡 |
-| v1.13 | 09-14 | 14 个技能默认 HTTPS 克隆，维护者可用 SSH 模式克隆后推送 | 哥拿坡 |
-| v1.12 | 09-14 | 主仓库过滤 skills 内容；新增技能克隆/推送脚本与动态变量字段 | 哥拿坡 |
-| v1.11 | 09-14 | 技能维护口径修正：kit 内 skills 为维护入口，14 个同名 GitHub 技能仓库保持一致 | 哥拿坡 |
-| v1.10 | 09-13 | 技能主源收敛到 ai-harness-kit/skills，索引更新为 14 个内置技能 | 哥拿坡 |
-| v1.9 | 09-13 | 对外使用入口升级：Template、Clone、已有项目复制三路径；GitHub 开启模板仓库 | 哥拿坡 |
-| v1.8 | 09-13 | 仓库统一命名为 ai-harness-kit，远程地址切换为 genapohub/ai-harness-kit | 哥拿坡 |
-| v1.5 | 09-13 | GitHub 直接克隆版：三件套、Skills、Adapters、evals 默认在项目根目录 | 哥拿坡 |
+| v1.17 | 09-14 | 去除模板个人数据（责任人/变更条目通用化）；docs/harness 仅留通用速览，其余移出主干 | 维护者 |
+| v1.16 | 09-14 | 对外整洁化：维护者实战记录移出主干；新增英文 README；README 清单/结构一致性修复；补版本固定说明 | 维护者 |
+| v1.15 | 09-14 | 新增 init-harness.py（lite/full 双形态）与 evals-gate PR 门禁模板，替代 install.sh | 维护者 |
+| v1.14 | 09-14 | evals/runner.py 升级 v0.4，补全 regression-cases.json 全部 14 个 case（默认 4 个→14 个） | 维护者 |
+| v1.13 | 09-14 | 14 个技能默认 HTTPS 克隆，维护者可用 SSH 模式克隆后推送 | 维护者 |
+| v1.12 | 09-14 | 主仓库过滤 skills 内容；新增技能克隆/推送脚本与动态变量字段 | 维护者 |
+| v1.11 | 09-14 | 技能维护口径修正：kit 内 skills 为维护入口，14 个同名 GitHub 技能仓库保持一致 | 维护者 |
+| v1.10 | 09-13 | 技能主源收敛到 ai-harness-kit/skills，索引更新为 14 个内置技能 | 维护者 |
+| v1.9 | 09-13 | 对外使用入口升级：Template、Clone、已有项目复制三路径；GitHub 开启模板仓库 | 维护者 |
+| v1.8 | 09-13 | 仓库统一命名为 ai-harness-kit，远程地址切换为 genapohub/ai-harness-kit | 维护者 |
+| v1.5 | 09-13 | GitHub 直接克隆版：三件套、Skills、Adapters、evals 默认在项目根目录 | 维护者 |
 | v1.0 | 09-05 | 初版骨架 | 张三 |
 
 ---
@@ -152,4 +153,4 @@ Harness 版本：v1.16
 ---
 
 > _本文件是 Harness L2 State 层的物理实现，配合 AGENTS.md 使用。_
-> _版本：v1.16（2026-09-14）· ai-harness-kit_
+> _版本：v1.17（2026-09-14）· ai-harness-kit_

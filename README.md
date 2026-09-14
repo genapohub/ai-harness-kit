@@ -83,7 +83,7 @@ SECURITY.md
 .kiro/
 evals/
 scripts/
-docs/          # 可选：Harness 方法论参考（01-调研 / 06-工具链），不需要可略过
+docs/          # 可选：Harness 方法论速览，不需要可略过
 ```
 
 复制后先改 3 个入口文件：`AGENTS.md`、`project-tracker.md`、`.ai/SKILLS.md`。
@@ -130,7 +130,7 @@ your-project/
 ├── skills/                    # 初始为空，按需克隆 14 个独立角色技能仓库
 ├── evals/                     # AI 产出质量回归检查
 ├── scripts/                   # 维护脚本，日常使用无需先执行
-└── docs/harness/              # Harness 方法论参考（01-调研 / 06-工具链），外部项目可删
+└── docs/harness/              # Harness 方法论速览（可选），外部项目可删
 ```
 
 > `docs/` 只是方法论参考，**不是运行必需的**。只要不需要，直接用 `init-harness.py --lite` 铺壳时就不会带上它。
@@ -261,11 +261,17 @@ python3 scripts/check-skill-repos.py
 
 ## 九、版本
 
-当前版本：`harness-v1.16`
+当前版本：`harness-v1.17`
+
+v1.17 变更：
+
+1. **去除模板中的个人数据**：`project-tracker.md` 责任人字段、`AGENTS.md` 变更条目等处的个人名/项目名统一通用化，模板不再夹带任何个人字段。
+2. `docs/harness/` 对外只保留一份通用《方法论速览》（README.md）；维护者的调研笔记、工具脚本、实战记录全部移出主干（`.gitignore` 忽略，本地保留），不再随模板分发。
+3. 中英文 README 的 `docs/` 描述同步更新。
 
 v1.16 变更：
 
-1. 对外发布整洁化：维护者自身项目实战记录（`docs/harness/05-实战/`）移出主干，本地保留、不再随模板分发。
+1. 对外发布整洁化：维护者自身项目实战记录移出主干，本地保留、不再随模板分发。
 2. 新增 `README.en.md` 英文版，降低非中文用户上手门槛。
 3. 修复 README「路径 C 复制清单」与「项目结构」不一致：清单现列出 `docs/`，并标注为可选。
 4. 新增版本固定说明：克隆时可用 `git clone -b harness-vX.Y` 锁定版本（此前默认只能跟随最新）。
@@ -301,7 +307,7 @@ v1.11 变更：
 
 v1.10 变更：
 
-1. 技能主源收敛到 `ai-harness-kit/skills/`，不再依赖外部 `00-Skills汇总`。
+1. 技能主源收敛到 `ai-harness-kit/skills/`，不再依赖外部目录。
 2. `.ai/SKILLS.md` 按当前 14 个内置技能重建索引。
 3. `scripts/refresh-skills.sh` 改为从仓库自身 `skills/` 生成技能索引。
 
@@ -326,14 +332,14 @@ v1.7 变更：
 
 v1.6 变更：
 
-1. 合并 `05-Harness` 母体资料到 `docs/harness/`。
+1. 合并早期 Harness 资料到 `docs/harness/`。
 2. 仓库升级为可直接克隆的项目根目录模板。
 3. 默认内置角色技能和多工具适配文件。
 
 ## 十、维护原则
 
 1. 以后只维护 `ai-harness-kit`。
-2. 不再保留 `05-Harness` / `06-harness-kit` 多套分叉；`08-ai-dev-suite` 原始内容待备份恢复后补入 `ai-harness-kit`。
+2. 不再保留多套分叉；所有治理资产统一收敛到 `ai-harness-kit`。
 3. 新项目优先用 GitHub Template 创建。
 4. 规则、技能、evals、适配文件都跟项目根目录一起进入版本控制。
 5. 每次稳定变更都更新 `AGENTS.md` 版本段，并打 `harness-vX.Y` tag。

@@ -89,7 +89,7 @@ SECURITY.md
 .kiro/
 evals/
 scripts/
-docs/          # optional: Harness methodology notes (01-research / 06-toolchain)
+docs/          # optional: Harness methodology primer
 ```
 
 Then edit the three entry files: `AGENTS.md`, `project-tracker.md`, `.ai/SKILLS.md`.
@@ -255,7 +255,7 @@ It writes `.github/workflows/evals-gate.yml`, running `python3 evals/runner.py .
 Current: `harness-v1.16`
 
 v1.16:
-1. External-release cleanup: maintainer's own project logs (`docs/harness/05-实战/`) moved out of the shipped tree.
+1. External-release cleanup: maintainer's own project logs moved out of the shipped tree.
 2. Added `README.en.md` (this file).
 3. Fixed inconsistency between the README "Path C copy list" and the project structure.
 4. Added version-pinning instructions (`git clone -b harness-vX.Y`).

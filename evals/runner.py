@@ -28,7 +28,7 @@ v0.4 变更（P0 修复：此前仅实现 4/14，名不副实）:
   - 新增 10 个 case 的静态/结构实现：code-001 / code-003 / spec-001 / spec-002 /
     doc-001 / doc-002 / doc-003 / collab-001 / collab-002 / security-002
   - 新增 doc 专用 walker（独立于 SKIP_DIRS，覆盖真实项目的「数字编号目录」如 01-产品文档）
-  - 新增 project-tracker 柔性定位（根目录 / 07-其它文档 / .skills-memory / .workbuddy/memory）
+  - 新增 project-tracker 柔性定位（根目录 / docs/ / .ai/ 等常见位置）
   - code-003 / spec-002 为「代理检查」：本地静态只能验证前置条件，逐文件覆盖率与
     PR 字段完整性依赖 CI + forge API，runner 仅输出提示性命中
 
@@ -144,10 +144,8 @@ DESIGN_SECTIONS = {
 # project-tracker.md 柔性候选位置
 TRACKER_CANDIDATES = [
     "project-tracker.md",
-    "07-其它文档/project-tracker.md",
-    ".skills-memory/project-tracker.md",
-    ".workbuddy/memory/project-tracker.md",
     "docs/project-tracker.md",
+    ".ai/project-tracker.md",
 ]
 
 
