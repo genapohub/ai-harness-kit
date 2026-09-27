@@ -17,7 +17,10 @@
 关联 AGENTS.md：AGENTS.md
 关联仓库：{{REPOSITORY_URL}}
 当前分支：{{MAIN_BRANCH}}
-Harness 版本：v1.20
+Harness 版本：v1.21
+开发模式：{{DELIVERY_MODE}}
+UI产出方式：{{UI_OUTPUT_MODE}}
+契约流程：{{PACT_STATUS}}
 ```
 
 ---
@@ -91,6 +94,29 @@ Harness 版本：v1.20
 
 ---
 
+
+## 七-A、契约与验收状态
+
+| 项目 | 状态 | 文件/证据 | 未决事项 |
+|---|---|---|---|
+| PRD | 待补充/已完成/需更新 | {{PRD_DOC}} | {{PRD_TODO}} |
+| 页面设计契约 | 待补充/已完成/需更新 | {{PAGE_CONTRACT_DOC}} | {{PAGE_CONTRACT_TODO}} |
+| API 契约 / openapi | 待补充/已完成/需更新 | {{API_CONTRACT_DOC}} | {{API_CONTRACT_TODO}} |
+| 数据模型 | 待补充/已完成/需更新 | {{DATA_MODEL_DOC}} | {{DATA_MODEL_TODO}} |
+| UI 设计 / Ardot / Figma | 不产出/待补充/已完成/需更新 | {{UI_DOC_OR_CANVAS}} | {{UI_TODO}} |
+| 测试证据 | 未执行/部分通过/通过/阻塞 | {{TEST_EVIDENCE}} | {{TEST_TODO}} |
+| 验收报告 | 未开始/进行中/完成/阻塞 | {{ACCEPTANCE_REPORT}} | {{ACCEPTANCE_TODO}} |
+
+> 规则：页面/API/字段/流程变更必须先更新契约，再改代码；Mock 结果不得标记为真实验收通过。
+
+## 七-B、项目记忆与经验候选
+
+| 日期 | 经验类型 | 内容 | 适用条件 | 来源证据 | 是否进入通用模板 |
+|---|---|---|---|---|---|
+| {{DATE}} | 项目经验/通用候选 | {{LEARNING}} | {{CONDITION}} | {{EVIDENCE}} | 待确认 |
+
+> 项目特有经验留在项目内；可复用经验先形成候选，经确认后再进入通用模板或技能包。
+
 ## 七、决策日志（最近 5 条）
 
 | 日期 | 决策 | 原因 | 决策人 | 关联文档 |
@@ -127,6 +153,7 @@ Harness 版本：v1.20
 
 | 版本 | 日期 | 主要变更 | 责任人 |
 |---|---|---|---|
+| v1.21 | 09-14 | 修正 Copilot 拉技能提示；evals runner 升级 v0.5，豁免 workflow example 模板误报并修复调试扫描路径 bug；新增 pytest 测试基础设施 | 维护者 |
 | v1.20 | 09-14 | 移除全部 scripts/ 维护脚本（不再分发，本地保留）；拉技能改为 .ai/SKILLS.md 逐条 clone 并保留 AI 主动提示机制；PR 门禁模板移至 .github/workflows/*.example | 维护者 |
 | v1.19 | 09-14 | 移除装机脚本 init-harness.py，kit 不再携带铺壳/注入脚本；例外路径改手动复制，PR 门禁改复制模板 | 维护者 |
 | v1.18 | 09-14 | 对外使用收敛为单一路径（克隆到项目根目录），删除路径 A/B/C 三分法；init-harness.py 降为例外场景工具 | 维护者 |
@@ -156,4 +183,4 @@ Harness 版本：v1.20
 ---
 
 > _本文件是 Harness L2 State 层的物理实现，配合 AGENTS.md 使用。_
-> _版本：v1.20（2026-09-14）· ai-harness-kit_
+> _版本：v1.21（2026-09-14）· ai-harness-kit_

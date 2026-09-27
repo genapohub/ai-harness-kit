@@ -85,6 +85,18 @@
       "path": "skills/ui-designer-guide",
       "repo_ssh": "git@github.com:genapohub/ui-designer-guide.git",
       "repo_https": "https://github.com/genapohub/ui-designer-guide.git"
+    },
+    {
+      "name": "software-dev-team",
+      "path": "skills/software-dev-team",
+      "repo_ssh": "git@github.com:genapohub/software-dev-team.git",
+      "repo_https": "https://github.com/genapohub/software-dev-team.git"
+    },
+    {
+      "name": "pact-flow",
+      "path": "skills/pact-flow",
+      "repo_ssh": "git@github.com:genapohub/pact-flow.git",
+      "repo_https": "https://github.com/genapohub/pact-flow.git"
     }
   ]
 }

@@ -1,10 +1,10 @@
 {
  "version": "1.0",
- "last_updated": "2026-09-13",
+ "last_updated": "2026-09-27",
  "schema_version": "1.0",
  "purpose": "AI 编程产出物回归测试基线。每角色 3-5 个固定 case,跑过即通过,失败即回归。",
  "usage": {
-  "how_to_run": "用脚本或 CI 读取本文件,对每个 case 执行 input → AI 产出 → 与 expected 对比",
+  "how_to_run": "用 evals/runner.py 对项目根目录执行静态/结构检查，覆盖 Harness、PM+AI 协同、代码、规范、文档、协作、安全。",
   "pass_criteria": "全部 case 的 actual 与 expected 一致(或在允许误差内)",
   "fail_handling": "失败 = AI 产出物质量下降,必须修复 AI 配置/规则后再回归",
   "exemption_policy": "豁免机制（2026-09-06 试点沉淀）：① 存量噪音 = 基线——首次全量扫描结果即项目基线，历史 commit 不改写（代价大于收益），新增由增量模式守护；② 内置豁免清单——test_*.py / deploy/ / migrate_* / scripts/ 的 print 类输出、.env.example 被跟踪、行内 os.getenv 读取模式 = 设计意图，自动豁免；③ 新增豁免必须人工确认并注明理由（防用豁免掩盖真问题）；④ 密钥全量审计交给 gitleaks / git-secrets 等专业工具，本套件只守增量",
@@ -26,6 +26,48 @@
      },
      "check_method": "检查 AGENTS.md / project-tracker.md / SECURITY.md 是否存在",
      "rationale": "三件套缺一项，项目级 AI 编程治理就不闭环"
+    }
+   ]
+  },
+  {
+   "category": "PM+AI 全栈协同",
+   "cases": [
+    {
+     "id": "pm-ai-001",
+     "name": "PM+AI 目录口径统一",
+     "scope": "ai-harness-kit + pact-flow + software-dev-team",
+     "input": "对项目根目录执行 evals",
+     "expected": {
+      "has_8_standard_dirs": true,
+      "no_old_7_dir_terms": true
+     },
+     "check_method": "检查 AGENTS.md 是否包含 8 目录且无旧目录口径",
+     "rationale": "目录口径冲突会导致文档、代码、测试归档错位"
+    },
+    {
+     "id": "pm-ai-002",
+     "name": "契约先行门禁",
+     "scope": "页面/API/数据变更",
+     "input": "AI 准备修改页面、接口或字段",
+     "expected": {
+      "page_contract_before_ui_code": true,
+      "api_contract_before_backend_code": true,
+      "data_model_before_schema_change": true
+     },
+     "check_method": "检查 AGENTS.md 是否声明契约先行规则",
+     "rationale": "先写代码后补契约会导致 PM、前端、后端和测试口径漂移"
+    },
+    {
+     "id": "pm-ai-003",
+     "name": "Mock 不替代真实验收",
+     "scope": "联调与验收",
+     "input": "AI 完成 Mock 原型或演示数据流程",
+     "expected": {
+      "mock_not_marked_as_real_acceptance": true,
+      "real_evidence_required": true
+     },
+     "check_method": "检查 AGENTS.md 是否声明 Mock 不能替代真实验收",
+     "rationale": "Mock 只能用于开发提速，不能作为上线验收证据"
     }
    ]
   },

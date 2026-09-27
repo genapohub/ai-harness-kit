@@ -38,7 +38,7 @@ git clone git@github.com:genapohub/ai-harness-kit.git your-project
 To pin a specific version instead of tracking the latest (see §9 for the version list):
 
 ```bash
-git clone -b harness-v1.20 https://github.com/genapohub/ai-harness-kit.git your-project
+git clone -b harness-v1.21 https://github.com/genapohub/ai-harness-kit.git your-project
 ```
 
 ### Step 1 after cloning: pull the role skills
@@ -174,10 +174,15 @@ It runs `python3 evals/runner.py . --since HEAD~1` on PRs or pushes to `main`. D
 
 ## 9. Versions
 
-Current: `harness-v1.20`
+Current: `harness-v1.21`
+
+v1.21:
+1. Fixed the GitHub Copilot adapter: it no longer points to the removed `scripts/clone-skills.py`; it now points to the per-repo clone commands in `.ai/SKILLS.md`.
+2. `evals/runner.py` upgraded to v0.5: fixes relative-path reporting when debug-code hits are found, and exempts `.github/workflows/*.example` templates so the kit's own PR-gate sample is not flagged as an unauthorized CI change.
+3. Added minimal pytest infrastructure for the runner, so the template repository itself satisfies the code-003 structural test check.
 
 v1.20:
-1. **All maintenance scripts under `scripts/` removed** (no longer distributed): pulling role skills is now a per-repo `git clone` list in `.ai/SKILLS.md`, and dynamic variables are replaced by hand.
+1. **Maintenance scripts under `scripts/` are no longer distributed** (maintainers may keep them locally, but they are ignored by `.gitignore`): pulling role skills is now a per-repo `git clone` list in `.ai/SKILLS.md`, and dynamic variables are replaced by hand.
 2. **The "pull your skills" prompt is kept and strengthened**: step 1.1 of the workflow in `AGENTS.md` requires the AI to prompt the human and hand over the clone commands when `skills/*/SKILL.md` is missing.
 3. The PR gate template moved out of `scripts/` to `.github/workflows/evals-gate.yml.example` — copy and rename to enable.
 

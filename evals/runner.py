@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Harness 最小 evals runner · v0.4
 
-对应 regression-cases.json 中声明的 14 个 case（全部落地为静态/结构检查）:
+对应 regression-cases.json 中声明的 17 个 case（全部落地为静态/结构检查）:
 
   Harness 治理
     harness-001  Harness 治理三件套已落位（AGENTS.md / project-tracker.md / SECURITY.md）
@@ -57,7 +57,7 @@ from datetime import date
 from pathlib import Path
 from typing import Optional
 
-RUNNER_VERSION = "0.4"
+RUNNER_VERSION = "0.6"
 
 CODE_EXTS = {".py", ".js", ".ts", ".vue", ".wxml", ".json"}
 SKIP_DIRS = {".git", ".ai", ".claude", ".cursor", ".github", ".kiro",
@@ -235,6 +235,7 @@ def scan_debug(repo: Path):
     """
     hits = []
     for p in list_code_files(repo):
+        rel = str(p.relative_to(repo))
         parts = p.parts
         if "deploy" in parts or "scripts" in parts:
             continue
@@ -309,7 +310,10 @@ def scan_blacklist_tools(repo: Path):
     # git 历史：最近 N commit 是否改了 CI workflow
     log = git(repo, "log", f"-{COMMIT_SAMPLE}", "--name-only", "--pretty=%H").splitlines()
     for line in log:
-        if CI_WORKFLOWS in line:
+        path = line.strip()
+        if not path:
+            continue
+        if CI_WORKFLOWS in path and not path.endswith(".example"):
             hits.append({"file": line.strip(), "line": 0, "type": "ci_workflow_modified",
                          "match": "检测到 .github/workflows 变更（需人类 review，AI 不应擅改 CI）"})
     return hits
@@ -475,6 +479,59 @@ def scan_sensitive_data(repo: Path):
     return hits
 
 
+
+
+# ---------------------------------------------------------------------------
+# pm-ai-* PM+AI 全栈协同检查
+# ---------------------------------------------------------------------------
+REQUIRED_PM_AI_DIRS = [
+    "01-竞品分析", "02-产品文档", "03-技术文档", "04-品牌设计",
+    "05-UIUX设计", "06-项目编码", "07-测试用例", "08-其它文档",
+]
+OLD_DIR_TERMS = ["03-品牌设计", "04-UIUX设计", "05-技术文档", "07-其他文档"]
+
+
+def scan_pm_ai_directory_contract(repo: Path):
+    """pm-ai-001: AGENTS.md 中目录口径应统一为 8 目录，不残留旧 7 目录。"""
+    hits = []
+    fp = repo / "AGENTS.md"
+    if not fp.is_file():
+        return hits
+    text = fp.read_text(errors="ignore")
+    for d in REQUIRED_PM_AI_DIRS:
+        if d not in text:
+            hits.append({"file": "AGENTS.md", "line": 0, "type": "missing_pm_ai_dir", "match": d})
+    for old in OLD_DIR_TERMS:
+        if old in text:
+            hits.append({"file": "AGENTS.md", "line": 0, "type": "old_pm_ai_dir", "match": old})
+    return hits
+
+
+def scan_contract_first_gate(repo: Path):
+    """pm-ai-002: AGENTS.md 应声明契约先行，不允许先写代码后补文档。"""
+    hits = []
+    fp = repo / "AGENTS.md"
+    if not fp.is_file():
+        return hits
+    text = fp.read_text(errors="ignore")
+    required = ["页面设计契约", "API 契约", "先更新", "再改代码"]
+    for key in required:
+        if key not in text:
+            hits.append({"file": "AGENTS.md", "line": 0, "type": "missing_contract_gate", "match": key})
+    return hits
+
+
+def scan_mock_acceptance_gate(repo: Path):
+    """pm-ai-003: AGENTS.md 应声明 Mock 不能替代真实验收。"""
+    hits = []
+    fp = repo / "AGENTS.md"
+    if not fp.is_file():
+        return hits
+    text = fp.read_text(errors="ignore")
+    if "Mock" not in text or "不能" not in text or "真实验收" not in text:
+        hits.append({"file": "AGENTS.md", "line": 0, "type": "missing_mock_acceptance_gate", "match": "Mock 不能替代真实验收"})
+    return hits
+
 # ---------------------------------------------------------------------------
 # 主流程
 # ---------------------------------------------------------------------------
@@ -503,6 +560,9 @@ def main():
         {"id": "doc-003", "name": "技术选型/设计文档决策可追溯", "hits": scan_design_docs(repo)},
         {"id": "collab-001", "name": "跨角色上下文交接", "hits": check_collab_handoff(repo)},
         {"id": "collab-002", "name": "角色冲突升级路径", "hits": check_conflict_escalation(repo)},
+        {"id": "pm-ai-001", "name": "PM+AI 目录口径统一", "hits": scan_pm_ai_directory_contract(repo)},
+        {"id": "pm-ai-002", "name": "契约先行门禁", "hits": scan_contract_first_gate(repo)},
+        {"id": "pm-ai-003", "name": "Mock 不替代真实验收", "hits": scan_mock_acceptance_gate(repo)},
         {"id": "security-001", "name": "无密钥泄露", "hits": scan_secrets(repo)},
         {"id": "security-002", "name": "敏感数据脱敏", "hits": scan_sensitive_data(repo)},
     ]

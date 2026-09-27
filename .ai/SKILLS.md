@@ -1,6 +1,6 @@
 # 项目 Skills 清单
 
-技能数量: 14
+技能数量: 16
 来源: `.ai/skills-manifest.json`
 维护日期: 2026-09-14
 
@@ -26,6 +26,10 @@ git clone https://github.com/genapohub/qa-testing-guide.git skills/qa-testing-gu
 git clone https://github.com/genapohub/team-orchestrator.git skills/team-orchestrator
 git clone https://github.com/genapohub/tech-lead-guide.git skills/tech-lead-guide
 git clone https://github.com/genapohub/ui-designer-guide.git skills/ui-designer-guide
+
+# 推荐流程技能（按项目需要拉取）
+git clone https://github.com/genapohub/software-dev-team.git skills/software-dev-team
+git clone https://github.com/genapohub/pact-flow.git skills/pact-flow
 ```
 
 已配置 SSH 时，把 `https://github.com/genapohub/<name>.git` 换成 `git@github.com:genapohub/<name>.git`，便于后续推送。
@@ -50,6 +54,8 @@ git clone https://github.com/genapohub/ui-designer-guide.git skills/ui-designer-
 | team-orchestrator | skills/team-orchestrator | https://github.com/genapohub/team-orchestrator |
 | tech-lead-guide | skills/tech-lead-guide | https://github.com/genapohub/tech-lead-guide |
 | ui-designer-guide | skills/ui-designer-guide | https://github.com/genapohub/ui-designer-guide |
+| software-dev-team | skills/software-dev-team | https://github.com/genapohub/software-dev-team |
+| pact-flow | skills/pact-flow | https://github.com/genapohub/pact-flow |
 
 ## 三、本项目启用的角色技能
 
@@ -69,3 +75,5 @@ git clone https://github.com/genapohub/ui-designer-guide.git skills/ui-designer-
 - [ ] 运营 operations-guide
 - [ ] 平面设计 graphic-design-guide
 - [ ] 多角色调度 team-orchestrator
+- [ ] MVP/迭代/BugFix 专家团 software-dev-team
+- [ ] 契约化交付流程 pact-flow

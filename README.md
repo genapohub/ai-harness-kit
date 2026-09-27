@@ -16,6 +16,11 @@
 3. `.ai/skills-manifest.json` + `.ai/SKILLS.md`：项目可用角色技能清单。
 4. `evals/` + 多工具适配文件：用回归检查和工具规则守住产出质量。
 
+
+### 与 WorkBuddy 主规范的关系
+
+在哥拿坡本地工作区内，`/Users/macos/Downloads/WorkBuddy/agents.md` 是唯一主规范；本仓库的 `AGENTS.md` 是从主规范抽取的项目模板导出版。维护通用规则时先改 WorkBuddy 主规范，再同步刷新本模板；新项目 clone 后则以项目根 `AGENTS.md` 为执行准则。
+
 ## 二、怎么用：克隆到你的项目根目录
 
 对外只有一条使用方式——**把本仓库克隆成你的项目根目录**。克隆下来即为可用形态，不需要执行任何装机脚本。
@@ -38,7 +43,7 @@ git clone git@github.com:genapohub/ai-harness-kit.git your-project
 想固定版本而不是跟随最新改动（版本列表见 §九）：
 
 ```bash
-git clone -b harness-v1.20 https://github.com/genapohub/ai-harness-kit.git your-project
+git clone -b harness-v1.21 https://github.com/genapohub/ai-harness-kit.git your-project
 ```
 
 ### 克隆后第一步：拉取角色技能
@@ -52,7 +57,7 @@ git clone https://github.com/genapohub/product-plan-guide.git skills/product-pla
 git clone https://github.com/genapohub/frontend-dev-guide.git skills/frontend-dev-guide
 ```
 
-14 个技能仓的完整清单见 §六。
+16 个技能仓的完整清单见 §六。
 
 ### 克隆后第二步：改三个入口文件
 
@@ -85,18 +90,31 @@ your-project/
 ├── project-tracker.md         # 项目状态单一事实源：WIP、风险、决策、AI 交接
 ├── SECURITY.md                # 安全子法：密钥、脱敏、模型路由、事故响应
 ├── .ai/SKILLS.md              # 项目技能清单
-├── .ai/skills-manifest.json   # 14 个角色技能仓库清单
+├── .ai/skills-manifest.json   # 16 个技能仓库清单
 ├── .ai/harness.variables.example.json # 项目动态变量样例
 ├── .claude/settings.json      # Claude Code 权限建议
 ├── .cursor/rules/harness.mdc  # Cursor 项目规则
 ├── .github/                   # Copilot 指令 + PR 模板
 ├── .kiro/steering/harness.md  # Kiro steering
-├── skills/                    # 初始为空，按需克隆 14 个独立角色技能仓库
+├── skills/                    # 初始为空，按需克隆角色技能与流程技能仓库
 ├── evals/                     # AI 产出质量回归检查
 └── docs/harness/              # Harness 方法论速览（可选），外部项目可删
 ```
 
 > `docs/` 只是方法论参考，**不是运行必需的**，外部项目可以直接删掉。
+
+
+## 三-A、PM+AI 全栈协同关系
+
+`ai-harness-kit` 是项目根治理层，不替代具体专家技能；推荐与以下两个流程技能协同：
+
+| 组件 | 层级 | 何时启用 | 职责 |
+|---|---|---|---|
+| `ai-harness-kit` | 治理层 | 所有项目 | 统一 `AGENTS.md`、目录、红线、项目记忆、质量门禁 |
+| `software-dev-team` | 编排层 | 从 0 到 1、产品迭代、BugFix、多角色任务 | 调度 PM/架构/UI/前端/后端/QA/运维，管理阶段交接 |
+| `pact-flow` | 契约层 | 页面、API、Mock、联调、验收 | 执行 `PRD → 页面设计契约 → API 契约 → Mock → 后端 → 联调验收` |
+
+规则优先级：项目根 `AGENTS.md` > `software-dev-team` 编排 > `pact-flow` 契约子流程。技能包内示例目录与项目根冲突时，以项目根为准。
 
 ## 四、开工前只需要改三处
 
@@ -130,7 +148,7 @@ your-project/
 
 ## 六、角色技能维护
 
-`ai-harness-kit` 主仓库推送时过滤 `skills/` 内容，只保留 `skills/.gitkeep` 占位。14 个角色技能各自是独立 GitHub 仓库，完整清单与拉取命令见 `.ai/SKILLS.md`。
+`ai-harness-kit` 主仓库推送时过滤 `skills/` 内容，只保留 `skills/.gitkeep` 占位。角色技能与流程技能各自是独立 GitHub 仓库，完整清单与拉取命令见 `.ai/SKILLS.md`。
 
 任务对话里，如果 AI 发现 `skills/` 为空或缺少 `SKILL.md`，**必须先提示你拉取技能**，再使用角色技能——这是 `AGENTS.md` 工作流第 1.1 步的强制要求。
 
@@ -176,11 +194,17 @@ cp .github/workflows/evals-gate.yml.example .github/workflows/evals-gate.yml
 
 ## 九、版本
 
-当前版本：`harness-v1.20`
+当前版本：`harness-v1.21`
+
+v1.21 变更：
+
+1. 修正 GitHub Copilot 适配说明：不再提示已撤下的 `scripts/clone-skills.py`，统一指向 `.ai/SKILLS.md` 的逐条 clone 命令。
+2. `evals/runner.py` 升级 v0.5：修复调试代码扫描命中时的相对路径变量问题，并豁免 `.github/workflows/*.example` 模板文件，避免把模板仓自身的 PR 门禁样例误报为擅改 CI。
+3. 为 runner 增加最小 pytest 测试基础设施，模板仓自身也能被 code-003 结构检查守住。
 
 v1.20 变更：
 
-1. **移除全部 `scripts/` 维护脚本**（不再随仓库分发）：拉取角色技能改为在 `.ai/SKILLS.md` 中逐条 `git clone`，动态变量改为手动替换占位符。
+1. **`scripts/` 维护脚本不再随仓库分发**（维护者本地可保留，但已被 `.gitignore` 过滤）：拉取角色技能改为在 `.ai/SKILLS.md` 中逐条 `git clone`，动态变量改为手动替换占位符。
 2. **保留并强化「拉技能」提示机制**：`AGENTS.md` 工作流第 1.1 步要求 AI 发现 `skills/*/SKILL.md` 缺失时必须先提示人类并给出拉取命令；README §二、§六 同步说明。
 3. PR 门禁模板移出 `scripts/`，改放 `.github/workflows/evals-gate.yml.example`，复制改名即启用。
 
