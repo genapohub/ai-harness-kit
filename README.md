@@ -13,7 +13,7 @@
 
 1. `AGENTS.md`：AI 行为宪法，约束角色、工作流、红线、review。
 2. `project-tracker.md`：项目状态单一事实源，记录 WIP、风险、决策、交接。
-3. `.ai/skills-manifest.json` + `.ai/SKILLS.md`：项目可用角色技能清单。
+3. `.ai/skills-manifest.json` + `.ai/SKILLS.md`：项目常用流程技能清单。
 4. `evals/` + 多工具适配文件：用回归检查和工具规则守住产出质量。
 
 
@@ -43,21 +43,21 @@ git clone git@github.com:genapohub/ai-harness-kit.git your-project
 想固定版本而不是跟随最新改动（版本列表见 §九）：
 
 ```bash
-git clone -b harness-v1.22 https://github.com/genapohub/ai-harness-kit.git your-project
+git clone -b harness-v1.23 https://github.com/genapohub/ai-harness-kit.git your-project
 ```
 
-### 克隆后第一步：拉取角色技能
+### 克隆后第一步：拉取常用流程技能
 
-初始克隆不包含 `skills/` 下的角色技能内容（仓库只保留 `.gitkeep` 占位）。
+初始克隆不包含 `skills/` 下的流程技能内容（仓库只保留 `.gitkeep` 占位）。
 
-**任务对话中，如果 AI 发现 `skills/*/SKILL.md` 缺失，会主动提示你拉取技能**——这是 `AGENTS.md` 工作流第 1.1 步的强制要求。完整命令清单在 **`.ai/SKILLS.md`**，按需只拉本项目启用的那几个即可，例如：
+**任务对话中，如果 AI 发现 `software-dev-team` 或 `pact-flow` 缺失，会主动提示你拉取技能**。完整命令清单在 **`.ai/SKILLS.md`**：
 
 ```bash
-git clone https://github.com/genapohub/product-plan-guide.git skills/product-plan-guide
-git clone https://github.com/genapohub/frontend-dev-guide.git skills/frontend-dev-guide
+git clone https://github.com/genapohub/software-dev-team.git skills/software-dev-team
+git clone https://github.com/genapohub/pact-flow.git skills/pact-flow
 ```
 
-16 个技能仓的完整清单见 §六。
+当前默认只维护这 2 个常用流程技能；如项目后续确实需要独立角色技能，再按需扩展 `.ai/SKILLS.md`。
 
 ### 克隆后第二步：初始化项目变量、目录和记忆
 
@@ -95,7 +95,7 @@ evals/
 docs/          # 可选：Harness 方法论速览，不需要可略过
 ```
 
-复制后改上面三个入口文件即可开工。以后要拉取角色技能，按 `.ai/SKILLS.md` 里的命令逐个 clone 即可。
+复制后改上面三个入口文件即可开工。以后要拉取常用流程技能，按 `.ai/SKILLS.md` 里的命令 clone 即可。
 
 ## 三、项目结构
 
@@ -105,13 +105,13 @@ your-project/
 ├── project-tracker.md         # 项目状态单一事实源：WIP、风险、决策、AI 交接
 ├── SECURITY.md                # 安全子法：密钥、脱敏、模型路由、事故响应
 ├── .ai/SKILLS.md              # 项目技能清单
-├── .ai/skills-manifest.json   # 16 个技能仓库清单
+├── .ai/skills-manifest.json   # 常用流程技能仓库清单
 ├── .ai/harness.variables.example.json # 项目动态变量样例
 ├── .claude/settings.json      # Claude Code 权限建议
 ├── .cursor/rules/harness.mdc  # Cursor 项目规则
 ├── .github/                   # Copilot 指令 + PR 模板
 ├── .kiro/steering/harness.md  # Kiro steering
-├── skills/                    # 初始为空，按需克隆角色技能与流程技能仓库
+├── skills/                    # 初始为空，按需克隆 software-dev-team / pact-flow
 ├── evals/                     # AI 产出质量回归检查
 └── docs/harness/              # Harness 方法论速览（可选），外部项目可删
 ```
@@ -135,7 +135,7 @@ your-project/
 
 1. `AGENTS.md`：项目目标、目标用户、技术栈、当前阶段。
 2. `project-tracker.md`：当前阶段总览、WIP、风险、决策日志。
-3. `.ai/SKILLS.md`：确认本项目启用哪些角色技能。
+3. `.ai/SKILLS.md`：确认本项目启用 `software-dev-team` 与 `pact-flow`。
 
 ## 五、不同 AI 工具怎么读
 
@@ -144,7 +144,7 @@ your-project/
 | AI 行为规范 | `AGENTS.md` |
 | 项目状态持久化 | `project-tracker.md` |
 | 安全红线 | `SECURITY.md` |
-| 角色技能清单 | `.ai/skills-manifest.json` + `.ai/SKILLS.md` |
+| 常用技能清单 | `.ai/skills-manifest.json` + `.ai/SKILLS.md` |
 | Claude Code 适配 | `.claude/settings.json` |
 | Cursor 适配 | `.cursor/rules/harness.mdc` |
 | GitHub Copilot 适配 | `.github/copilot-instructions.md` |
@@ -161,18 +161,18 @@ your-project/
 4. Kiro：读取 `.kiro/steering/harness.md`。
 5. 团队协作：每次重要变更都同步更新 `project-tracker.md`。
 
-## 六、角色技能维护
+## 六、常用技能维护
 
-`ai-harness-kit` 主仓库推送时过滤 `skills/` 内容，只保留 `skills/.gitkeep` 占位。角色技能与流程技能各自是独立 GitHub 仓库，完整清单与拉取命令见 `.ai/SKILLS.md`。
+`ai-harness-kit` 主仓库推送时过滤 `skills/` 内容，只保留 `skills/.gitkeep` 占位。当前默认只维护 `software-dev-team` 与 `pact-flow` 两个常用流程技能，完整清单与拉取命令见 `.ai/SKILLS.md`。
 
-任务对话里，如果 AI 发现 `skills/` 为空或缺少 `SKILL.md`，**必须先提示你拉取技能**，再使用角色技能——这是 `AGENTS.md` 工作流第 1.1 步的强制要求。
+任务对话里，如果 AI 发现 `software-dev-team` 或 `pact-flow` 缺失，必须先提示你按 `.ai/SKILLS.md` 拉取，再使用对应流程能力。
 
 维护规则：
 
-1. 修改角色技能时，直接改那个技能仓库的工作副本。
+1. 修改常用技能时，直接改对应技能仓库的工作副本。
 2. 在对应技能目录里 commit 并 push 到 `https://github.com/genapohub/<skill-name>`。
 3. `ai-harness-kit` 主仓库不提交 `skills/<skill-name>/` 内容，只提交清单与治理文件。
-4. 新增或删除角色技能时，同步更新 `.ai/skills-manifest.json` 与 `.ai/SKILLS.md` 两张清单。
+4. 若以后新增独立角色技能，再同步更新 `.ai/skills-manifest.json` 与 `.ai/SKILLS.md` 两张清单。
 
 ## 七、动态变量
 
@@ -209,13 +209,19 @@ cp .github/workflows/evals-gate.yml.example .github/workflows/evals-gate.yml
 
 ## 九、版本
 
-当前版本：`harness-v1.22`
+当前版本：`harness-v1.23`
+
+v1.23 变更：
+
+1. 默认技能清单收敛为 `software-dev-team` 与 `pact-flow`，不再默认拉取 14 个独立角色技能。
+2. `.ai/SKILLS.md` 与 `.ai/skills-manifest.json` 改为轻量清单，降低换机恢复和新项目初始化成本。
+3. 独立角色技能保留为可选扩展；确实需要时再按项目单独登记。
 
 v1.22 变更：
 
 1. 新增 `scripts/init_project.py`：支持 `--preview`、`--check`、`--set KEY=VALUE`、`--force`，用于初始化标准目录、`.ai/` 记忆骨架、项目变量和本地启动说明。
 2. `.ai/harness.variables.example.json` 补齐开发模式、UI 产出方式、MVP 范围、契约与验收状态字段。
-3. 新项目启动流程明确为：克隆模板 → 拉取角色技能 → 初始化项目变量和记忆 → 修改三处入口文件。
+3. 新项目启动流程明确为：克隆模板 → 拉取常用流程技能 → 初始化项目变量和记忆 → 修改三处入口文件。
 
 v1.21 变更：
 
@@ -265,14 +271,14 @@ v1.14 变更：
 
 v1.13 变更：
 
-1. 14 个角色技能默认使用公开 HTTPS 克隆，降低外部用户首次使用门槛。
+1. 历史版本曾默认提供 14 个角色技能 HTTPS 克隆；当前默认已收敛为 software-dev-team / pact-flow。
 2. 维护者需要推送技能仓库时，可通过 `python3 scripts/clone-skills.py --protocol ssh` 使用 SSH remote。
 
 v1.12 变更：
 
 1. `ai-harness-kit` 主仓库推送过滤 `skills/` 内容，只保留技能清单与空目录占位。
-2. 初始克隆后通过 `python3 scripts/clone-skills.py` 拉取 14 个独立技能仓库。
-3. 新增 `scripts/push-skills.py`，支持 14 个角色技能独立仓库逐个推送。
+2. 历史版本曾通过 `python3 scripts/clone-skills.py` 拉取 14 个独立技能仓库；当前默认已收敛为按 `.ai/SKILLS.md` 拉取常用流程技能。
+3. 历史版本新增 `scripts/push-skills.py` 支持多技能仓库逐个推送。
 4. 新增 `.ai/harness.variables.example.json` 与 `scripts/apply-variables.py`，统一项目动态变量字段。
 
 v1.11 变更：
@@ -285,7 +291,7 @@ v1.11 变更：
 v1.10 变更：
 
 1. 技能主源收敛到 `ai-harness-kit/skills/`，不再依赖外部目录。
-2. `.ai/SKILLS.md` 按当前 14 个内置技能重建索引。
+2. `.ai/SKILLS.md` 当时按 14 个内置技能重建索引；当前已收敛为常用流程技能清单。
 3. `scripts/refresh-skills.sh` 改为从仓库自身 `skills/` 生成技能索引。
 
 v1.9 变更：

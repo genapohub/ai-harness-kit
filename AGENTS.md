@@ -95,19 +95,17 @@ PRD → 页面设计契约 → 询问是否使用 Ardot/Figma → UI 设计稿/�
 主导级别：对话协作（AI 建议，人类审核）
 触发场景：{{AI_TRIGGER_SCOPE}}
 激活角色清单：
-  P0_常驻：{{P0_ROLES}}
-  P1_阶段激活：{{P1_ROLES}}
-  P2_挂起：{{P2_ROLES}}
+  常用技能：software-dev-team / pact-flow
 ```
 
-主导级别默认是“对话协作”。全自主模式默认禁用。复杂任务可以按需调用角色技能，但所有角色必须服从项目根 `AGENTS.md`。
+主导级别默认是“对话协作”。全自主模式默认禁用。复杂任务优先调用 `software-dev-team` 编排；涉及页面/API/联调时调用或内嵌 `pact-flow`。
 
 ## 06. 标准工作流
 
 每个任务必须按以下流程执行：
 
 1. 读上下文：`AGENTS.md`、`project-tracker.md`、`.ai/SKILLS.md`、README、PRD、相关代码和最近提交。
-2. 检查角色技能：若 `skills/*/SKILL.md` 缺失，先提示拉取，不假装具备该角色能力。
+2. 检查常用技能：若 `skills/software-dev-team/SKILL.md` 或 `skills/pact-flow/SKILL.md` 缺失，先提示按 `.ai/SKILLS.md` 拉取，不假装具备对应流程能力。
 3. 明确需求：复述目标、范围、不做事项和验收标准。
 4. 更新契约：页面、API、数据、测试相关变更先改契约。
 5. 写方案：小改动写 1-3 句话，大改动写设计文档。
