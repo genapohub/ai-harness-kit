@@ -43,7 +43,7 @@ git clone git@github.com:genapohub/ai-harness-kit.git your-project
 想固定版本而不是跟随最新改动（版本列表见 §九）：
 
 ```bash
-git clone -b harness-v1.21 https://github.com/genapohub/ai-harness-kit.git your-project
+git clone -b harness-v1.22 https://github.com/genapohub/ai-harness-kit.git your-project
 ```
 
 ### 克隆后第一步：拉取角色技能
@@ -59,7 +59,22 @@ git clone https://github.com/genapohub/frontend-dev-guide.git skills/frontend-de
 
 16 个技能仓的完整清单见 §六。
 
-### 克隆后第二步：改三个入口文件
+### 克隆后第二步：初始化项目变量、目录和记忆
+
+新项目可以直接运行初始化工具，先生成标准目录、`.ai/` 记忆骨架、项目变量文件和本地启动说明：
+
+```bash
+python3 scripts/init_project.py --preview
+python3 scripts/init_project.py \
+  --set PROJECT_NAME=your-project \
+  --set DELIVERY_MODE=敏捷 \
+  --set UI_OUTPUT_MODE=Ardot
+python3 scripts/init_project.py --check
+```
+
+默认行为只补缺，不覆盖已有业务文件；需要预览时用 `--preview`，只检查时用 `--check`，确实要覆盖脚本管理的模板文件时才使用 `--force`。
+
+### 克隆后第三步：改三个入口文件
 
 改 `AGENTS.md` / `project-tracker.md` / `.ai/SKILLS.md` 三处即可开工，每个文件写什么见 §四。
 
@@ -194,7 +209,13 @@ cp .github/workflows/evals-gate.yml.example .github/workflows/evals-gate.yml
 
 ## 九、版本
 
-当前版本：`harness-v1.21`
+当前版本：`harness-v1.22`
+
+v1.22 变更：
+
+1. 新增 `scripts/init_project.py`：支持 `--preview`、`--check`、`--set KEY=VALUE`、`--force`，用于初始化标准目录、`.ai/` 记忆骨架、项目变量和本地启动说明。
+2. `.ai/harness.variables.example.json` 补齐开发模式、UI 产出方式、MVP 范围、契约与验收状态字段。
+3. 新项目启动流程明确为：克隆模板 → 拉取角色技能 → 初始化项目变量和记忆 → 修改三处入口文件。
 
 v1.21 变更：
 

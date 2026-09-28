@@ -53,6 +53,18 @@ AI 进入项目第一件事是读本区和项目知识地图，不得不了解�
 
 归档规则：竞品/调研进 `01-竞品分析`，PRD/需求池进 `02-产品文档`，技术方案/API/数据模型/部署说明进 `03-技术文档`，品牌资产进 `04-品牌设计`，页面契约/设计系统/UIUX 走查进 `05-UIUX设计`，源码进 `06-项目编码`，接口测试/全量测试/回归测试/UIUX 验收证据进 `07-测试用例`，交接/验收报告/复盘进 `08-其它文档`。
 
+## 02.1 初始化工具
+
+新项目或存量项目接入本模板时，可以使用 `scripts/init_project.py` 初始化项目根结构、`.ai/` 记忆骨架、项目变量文件和本地启动说明。
+
+```bash
+python3 scripts/init_project.py --preview
+python3 scripts/init_project.py --set PROJECT_NAME={{PROJECT_NAME}} --set DELIVERY_MODE=敏捷 --set UI_OUTPUT_MODE=Ardot
+python3 scripts/init_project.py --check
+```
+
+规则：默认只补缺，不覆盖已有业务文件；`--preview` 只预览，`--check` 只检查，只有明确需要重建脚本管理的模板文件时才使用 `--force`。
+
 ## 03. 三层协同路由
 
 | 层级 | 组件 | 触发场景 | 规则 |
