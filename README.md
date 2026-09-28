@@ -213,9 +213,9 @@ cp .github/workflows/evals-gate.yml.example .github/workflows/evals-gate.yml
 
 v1.23 变更：
 
-1. 默认技能清单收敛为 `software-dev-team` 与 `pact-flow`，不再默认拉取 14 个独立角色技能。
+1. 默认技能清单收敛为 `software-dev-team` 与 `pact-flow`，`ai-harness-kit` 不维护 14 个独立角色技能。
 2. `.ai/SKILLS.md` 与 `.ai/skills-manifest.json` 改为轻量清单，降低换机恢复和新项目初始化成本。
-3. 独立角色技能保留为可选扩展；确实需要时再按项目单独登记。
+3. 独立角色技能与本仓库解耦；哥拿坡本地可放在 WorkBuddy 的 `角色技能调度/`，确实需要时再按项目单独登记。
 
 v1.22 变更：
 
@@ -271,20 +271,20 @@ v1.14 变更：
 
 v1.13 变更：
 
-1. 历史版本曾默认提供 14 个角色技能 HTTPS 克隆；当前默认已收敛为 software-dev-team / pact-flow。
+1. 历史版本曾默认提供 14 个角色技能 HTTPS 克隆；当前 `ai-harness-kit` 不再维护 14 角色技能，默认只保留 software-dev-team / pact-flow。
 2. 维护者需要推送技能仓库时，可通过 `python3 scripts/clone-skills.py --protocol ssh` 使用 SSH remote。
 
 v1.12 变更：
 
 1. `ai-harness-kit` 主仓库推送过滤 `skills/` 内容，只保留技能清单与空目录占位。
-2. 历史版本曾通过 `python3 scripts/clone-skills.py` 拉取 14 个独立技能仓库；当前默认已收敛为按 `.ai/SKILLS.md` 拉取常用流程技能。
+2. 历史版本曾通过 `python3 scripts/clone-skills.py` 拉取 14 个独立技能仓库；当前默认按 `.ai/SKILLS.md` 只拉取常用流程技能。
 3. 历史版本新增 `scripts/push-skills.py` 支持多技能仓库逐个推送。
 4. 新增 `.ai/harness.variables.example.json` 与 `scripts/apply-variables.py`，统一项目动态变量字段。
 
 v1.11 变更：
 
-1. 明确 `ai-harness-kit/skills/` 是角色技能维护入口。
-2. 明确每个角色技能仍与 GitHub 同名独立仓库保持一致。
+1. 历史版本曾把 `ai-harness-kit/skills/` 作为角色技能维护入口；当前该目录只保留占位，不维护 14 角色技能。
+2. 历史版本曾要求每个角色技能与 GitHub 同名独立仓库保持一致；当前已与项目模板解耦。
 3. 新增 `scripts/check-skill-repos.py`，检查内置技能与独立仓库内容差异。
 4. `.ai/SKILLS.md` 增加独立仓库链接列。
 
@@ -317,7 +317,7 @@ v1.6 变更：
 
 1. 合并早期 Harness 资料到 `docs/harness/`。
 2. 仓库升级为可直接克隆的项目根目录模板。
-3. 默认内置角色技能和多工具适配文件。
+3. 历史版本默认内置角色技能和多工具适配文件；当前模板默认只维护常用流程技能。
 
 ## 十、维护原则
 
