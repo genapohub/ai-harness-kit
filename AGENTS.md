@@ -84,7 +84,7 @@ python3 scripts/init_project.py --check
 - 改数据表、状态机、迁移前，先更新数据模型与测试用例，再改代码。
 - Mock 只能用于开发提速，不能替代真实验收。
 - 即使是为了跑通流程的工程 Mock，也必须保证 UIUX 具备真实产品体验：视觉层级、品牌调性、组件化结构、五态反馈、响应式适配和截图验收不能缺席；不能以“只是 Mock”为理由交付粗糙页面。
-- 前端实现前必须确认是否产出 Ardot/Figma UI；不产出设计稿时，也必须补齐页面状态、交互、组件、Design Token 和 UIUX 验收规则。
+- 前端实现前必须确认是否产出 Ardot/Figma UI；不产出设计稿时，也必须补齐页面状态、交互、组件、Design Token 和 UIUX 验收规则。Web 后台前端（Vite + React 栈）默认采用 **shadcn/ui** 组件库——「复制即拥有」模式，CLI（`npx shadcn@latest create`）交互式脚手架 + `add` 追加组件，详见 frontend-dev-guide 的 AI 工具章节。
 
 固定链路：
 
