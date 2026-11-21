@@ -22,14 +22,16 @@ from typing import Any
 
 ROOT_FILES = ["AGENTS.md", "project-tracker.md", "SECURITY.md"]
 STANDARD_DIRS = [
-    "01-竞品分析",
-    "02-产品文档",
-    "03-技术文档",
-    "04-品牌设计",
-    "05-UIUX设计",
-    "06-项目编码",
-    "07-测试用例",
-    "08-其它文档",
+    "01-产品需求库",
+    "01-产品需求库/01-看懂产品",
+    "01-产品需求库/02-需求PRD",
+    "01-产品需求库/03-业务与市场",
+    "01-产品需求库/04-规范与模板",
+    "02-技术资产库",
+    "02-技术资产库/04-设计资产",
+    "02-技术资产库/05-测试资产",
+    "02-技术资产库/06-工程脚本",
+    "03-项目编码",
 ]
 AI_DIRS = [".ai", ".ai/任务日志", ".ai/归档"]
 AI_FILES = {
@@ -90,9 +92,9 @@ STARTUP_DOC = """# {{PROJECT_NAME}}_本地启动说明_v1.0
 
 | 配置名 | 工作目录 | 启动方式 | 验证 |
 |---|---|---|---|
-| API FastAPI 8010 | 06-项目编码/<api项目>/ | python -m uvicorn app.main:app --host 127.0.0.1 --port 8010 --reload | http://127.0.0.1:8010/healthz |
-| 后台前端 5173 | 06-项目编码/<admin前端项目>/ | npm install 后运行 npm run dev | Vite 端口 5173，代理到 http://127.0.0.1:8010 |
-| 小程序/移动端调试 | 06-项目编码/<miniapp或mobile项目>/ | 小程序用微信开发者工具导入；移动端按项目工具链启动 | 开发环境请求后端 8010 或明确测试域名 |
+| API FastAPI 8010 | 03-项目编码/<api项目>/ | python -m uvicorn app.main:app --host 127.0.0.1 --port 8010 --reload | http://127.0.0.1:8010/healthz |
+| 后台前端 5173 | 03-项目编码/<admin前端项目>/ | npm install 后运行 npm run dev | Vite 端口 5173，代理到 http://127.0.0.1:8010 |
+| 小程序/移动端调试 | 03-项目编码/<miniapp或mobile项目>/ | 小程序用微信开发者工具导入；移动端按项目工具链启动 | 开发环境请求后端 8010 或明确测试域名 |
 
 ## 启动顺序
 
@@ -128,11 +130,11 @@ DEFAULT_VARIABLES = {
     "OWNER_NAME": "待填写",
     "CREATED_DATE": date.today().isoformat(),
     "UPDATED_DATE": date.today().isoformat(),
-    "BUSINESS_DOC": "02-产品文档/项目_PRD_v1.0.md",
-    "API_DOC": "03-技术文档/API接口契约_v1.0.md",
-    "DATA_MODEL_DOC": "03-技术文档/数据模型_v1.0.md",
-    "DESIGN_DOC": "05-UIUX设计/页面设计契约_v1.0.md",
-    "DEPLOY_DOC": "08-其它文档/部署说明_v1.0.md",
+    "BUSINESS_DOC": "01-产品需求库/02-需求PRD/项目_PRD_v1.0.md",
+    "API_DOC": "02-技术资产库/API接口契约_v1.0.md",
+    "DATA_MODEL_DOC": "02-技术资产库/数据模型_v1.0.md",
+    "DESIGN_DOC": "02-技术资产库/04-设计资产/页面设计契约_v1.0.md",
+    "DEPLOY_DOC": "02-技术资产库/部署说明_v1.0.md",
     "PACT_STATUS": "待初始化",
     "PRD_DOC": "待补充",
     "PRD_TODO": "待补充",
@@ -215,7 +217,7 @@ class ProjectInitializer:
             atomic_write(path, json.dumps(self.variables, ensure_ascii=False, indent=2) + "\n")
 
     def ensure_startup_doc(self) -> None:
-        self.write_file("03-技术文档/本地启动说明_v1.0.md", STARTUP_DOC)
+        self.write_file("02-技术资产库/本地启动说明_v1.0.md", STARTUP_DOC)
 
     def render_existing_templates(self) -> None:
         render_targets = [
@@ -312,7 +314,7 @@ def main() -> int:
     parser.add_argument("--preview", action="store_true", help="只预览将要创建的内容，不写入")
     parser.add_argument("--check", action="store_true", help="只检查缺失文件和未替换变量")
     parser.add_argument("--force", action="store_true", help="允许覆盖脚本管理的模板文件")
-    parser.add_argument("--no-startup-doc", action="store_true", help="不创建 03-技术文档/本地启动说明_v1.0.md")
+    parser.add_argument("--no-startup-doc", action="store_true", help="不创建 02-技术资产库/本地启动说明_v1.0.md")
     args = parser.parse_args()
 
     try:

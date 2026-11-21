@@ -485,20 +485,24 @@ def scan_sensitive_data(repo: Path):
 # pm-ai-* PM+AI 全栈协同检查
 # ---------------------------------------------------------------------------
 REQUIRED_PM_AI_DIRS = [
-    "01-竞品分析", "02-产品文档", "03-技术文档", "04-品牌设计",
-    "05-UIUX设计", "06-项目编码", "07-测试用例", "08-其它文档",
+    "01-产品需求库", "02-技术资产库", "03-项目编码",
+]
+REQUIRED_PM_AI_SUBDIRS = [
+    "01-产品需求库/01-看懂产品", "01-产品需求库/02-需求PRD",
+    "01-产品需求库/03-业务与市场", "01-产品需求库/04-规范与模板",
+    "02-技术资产库/04-设计资产", "02-技术资产库/05-测试资产", "02-技术资产库/06-工程脚本",
 ]
 OLD_DIR_TERMS = ["03-品牌设计", "04-UIUX设计", "05-技术文档", "07-其他文档"]
 
 
 def scan_pm_ai_directory_contract(repo: Path):
-    """pm-ai-001: AGENTS.md 中目录口径应统一为 8 目录，不残留旧 7 目录。"""
+    """pm-ai-001: AGENTS.md 中目录口径应统一为「两库一仓」v2.0 结构，不残留旧 8 目录。"""
     hits = []
     fp = repo / "AGENTS.md"
     if not fp.is_file():
         return hits
     text = fp.read_text(errors="ignore")
-    for d in REQUIRED_PM_AI_DIRS:
+    for d in REQUIRED_PM_AI_DIRS + REQUIRED_PM_AI_SUBDIRS:
         if d not in text:
             hits.append({"file": "AGENTS.md", "line": 0, "type": "missing_pm_ai_dir", "match": d})
     for old in OLD_DIR_TERMS:
